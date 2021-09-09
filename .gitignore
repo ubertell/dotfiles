@@ -1,0 +1,7 @@
+.*
+!.bash*
+!.config
+!.dircolors
+!.gitignore
+!.profile
+!.psqlrc
