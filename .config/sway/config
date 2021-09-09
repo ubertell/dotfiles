@@ -40,10 +40,6 @@ bindswitch --reload lid:off output eDP-1 enable
 
 output * bg $HOME/files/pics/tree.png fill
 
-for_window [app_id="^menu$"]  floating enable,border pixel 5,resize set 900 500
-for_window [app_id="^hover$"] floating enable,border pixel 3,resize set 1600 1200
-for_window [app_id="^box$"]   floating enable,border pixel 3,resize set 900 500
-
 #
 # Keyboard
 #
@@ -63,7 +59,11 @@ bindsym $mod+Shift+e exit
 bindsym $mod+w kill
 
 bindsym $mod+Return exec alacritty
-bindsym $mod+d exec alacritty --class=menu -e /bin/sh -c $HOME/opt/sway-launcher/launcher
+
+for_window [app_id="^menu$"]  floating enable,border pixel 5,resize set 900 500
+
+bindsym $mod+d exec alacritty --class=menu -e /bin/sh -c $HOME/bin/launcher
+
 bindsym $mod+down exec swaylock -f -i $HOME/files/pics/stickman.jpg -s center -c 1c1c1c -e
 
 set $left  h
