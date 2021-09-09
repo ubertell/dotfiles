@@ -21,3 +21,4 @@ eval "$(dircolors $HOME/.dircolors)"
 export HISTFILE=''
 export LESSHISTFILE=''
 
+export MOZ_ENABLE_WAYLAND=1
