@@ -12,4 +12,4 @@ alias vi='nvim'
 alias vim='nvim'
 
 # init z.lua
-_ZL_CMD='j' eval "$(lua $HOME/bin/z.lua --init bash)"
+_ZL_CMD='j' eval "$(lua $HOME/bin/z.lua --init bash enhanced once)"
