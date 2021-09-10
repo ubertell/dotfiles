@@ -1,0 +1,35 @@
+#!/bin/env bash
+
+print_help() {
+    echo "Usage: wifi ACTION\n"
+    echo "ACTIONS:"
+    echo " help                 print this help message."
+    echo " scan                 scan for and list networks."
+    echo " up SSID              connect to a network."
+    echo " down                 disconnect from a network."
+    echo " status               show wifi status."
+}
+
+if [ $# -lt 1 ]; then
+    print_help
+    exit 0
+fi
+
+case "$1" in
+    help)
+        print_help
+        ;;
+    scan)
+        iwctl station wlan0 scan
+        iwctl station wlan0 get-networks
+        ;;
+    up)
+        iwctl station wlan0 connect $2
+        ;;
+    down)
+        iwctl station wlan0 disconnect
+        ;;
+    status)
+        iwctl station wlan0 show
+        ;;
+esac

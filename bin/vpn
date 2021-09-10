@@ -1,0 +1,33 @@
+#!/bin/env bash
+
+print_help() {
+    echo "Usage: wifi ACTION\n"
+    echo "ACTIONS:"
+    echo " up                   connect to a vpn."
+    echo " down                 disconnect from a vpn."
+}
+
+if [ $# -lt 1 ]; then
+    print_help
+    exit 0
+fi
+
+case "$1" in
+    help)
+        print_help
+        ;;
+    up)
+        CONFIG=$(sudo find /etc/wireguard/configs -type f | sort -R | head -n 1)
+        sudo ln -f -s $CONFIG /etc/wireguard/main.conf
+        sudo wg-quick up /etc/wireguard/main.conf
+        curl ipinfo.io
+        ;;
+    down)
+        sudo wg-quick down /etc/wireguard/main.conf
+        ;;
+    reset)
+        $0 down
+        $0 up
+        ;;
+esac
+
