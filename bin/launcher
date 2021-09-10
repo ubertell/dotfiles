@@ -2,29 +2,25 @@
 menu=( \
     books \
     firefox \
-    dia \
-    gimp \
     mixes \
     obsidian \
     soundcards \
     tracks \
     wifi \
-    wireshark \
-    zathura \
 )
 
 choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf)
 
 case "$choice" in
     books)
-        DIR=$HOME/files/books
+        DIR=$HOME/fil/books
         FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
         if [ -f "$FILE" ]; then
             setsid swaymsg -t command exec "zathura $FILE";
         fi
         ;;
     mixes)
-        DIR=$HOME/files/media/mix
+        DIR=$HOME/fil/music/mixes
         FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
         mpv --no-video $FILE
         ;;
@@ -33,10 +29,10 @@ case "$choice" in
         read -n 1 -p ... 
         ;;
     tracks)
-        mpv --shuffle --no-video $HOME/files/media/tracks
+        mpv --shuffle --no-video $HOME/fil/music/tracks
         ;;
     wifi)
-        nmtui
+        iwctl
         ;;
     *)
         setsid swaymsg -t command exec "$choice"
