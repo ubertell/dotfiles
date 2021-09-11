@@ -1,8 +1,8 @@
 #!/bin/env bash
 menu=( \
 	books \
-    internet \
     firefox \
+    luakit \
     mixes \
     obsidian \
     soundcards \
@@ -20,9 +20,6 @@ case "$choice" in
             setsid swaymsg -t command exec "zathura $FILE";
         fi
 		;;
-    kit)
-        setsid swaymsg -t command exec "luakit"
-        ;;
     mixes)
         DIR=$HOME/fil/music/mixes
         FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
