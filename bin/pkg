@@ -6,7 +6,7 @@ print_help() {
     echo "Usage: pkg ACTION|WRAPPER [PKGNAME|FILE]\n"
     echo "ACTIONS:"
     echo " help           print this help message."
-    echo " install        install package with PKGNAME."
+    echo " installed      list all installed packages."
     echo " add            install package with PKGNAME."
     echo " remove         remove package with PKGNAME."
     echo " search         search for PKGNAME in name/description."
@@ -38,8 +38,8 @@ case "$1" in
     help)
         print_help
         ;;
-    install)
-        shift; sudo xbps-install -S "$@"
+    installed)
+        shift; sudo xbps-query -l
         ;;
     add)
         shift; sudo xbps-install -S "$@"

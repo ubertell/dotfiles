@@ -1,6 +1,7 @@
 #!/bin/env bash
 menu=( \
-    books \
+	books \
+    internet \
     firefox \
     mixes \
     obsidian \
@@ -12,12 +13,15 @@ menu=( \
 choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf)
 
 case "$choice" in
-    books)
+	books)
         DIR=$HOME/fil/books
         FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
         if [ -f "$FILE" ]; then
             setsid swaymsg -t command exec "zathura $FILE";
         fi
+		;;
+    kit)
+        setsid swaymsg -t command exec "luakit"
         ;;
     mixes)
         DIR=$HOME/fil/music/mixes
@@ -34,7 +38,7 @@ case "$choice" in
     wifi)
         iwctl
         ;;
-    *)
+	*)
         setsid swaymsg -t command exec "$choice"
-        ;;
+		;;
 esac
