@@ -17,7 +17,7 @@ case "$1" in
         print_help
         ;;
     up)
-        CONFIG=$(sudo find /etc/wireguard/configs -type f | sort -R | head -n 1)
+        CONFIG=$(sudo find /etc/wireguard/conf -type f | sort -R | head -n 1)
         sudo ln -f -s $CONFIG /etc/wireguard/main.conf
         sudo wg-quick up /etc/wireguard/main.conf
         curl ipinfo.io
