@@ -1,0 +1,14 @@
+#!/bin/env bash
+
+print_help() {
+    echo "Usage: zap FILE"
+}
+
+if [ $# -lt 1 ]; then
+    print_help
+    exit 0
+fi
+
+DIR="$HOME/zap/$(/bin/date +'%Y/%m/%d')"
+mkdir -p $DIR
+mv "$@" $DIR
