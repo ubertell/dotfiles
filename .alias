@@ -1,0 +1,8 @@
+alias la='exa -F -a -s=type'
+alias ll='exa -F -l -a -s=type'
+alias ls='exa -F -s=type'
+
+alias tree='tree -F'
+
+alias vi='nvim'
+alias vim='nvim'

@@ -1,8 +1,9 @@
 .*
-!.gitkeep
+!.alias
 !.bash*
 !.config
 !.dircolors
 !.gitignore
+!.gitkeep
 !.profile
 !.psqlrc
