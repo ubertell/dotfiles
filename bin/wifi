@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 print_help() {
-    echo "Usage: wifi ACTION\n"
+    echo "Usage: wifi ACTION"
     echo "ACTIONS:"
     echo " help                 print this help message."
     echo " scan                 scan for and list networks."
@@ -29,7 +29,12 @@ case "$1" in
     down)
         iwctl station wlan0 disconnect
         ;;
-    status)
+    show)
         iwctl station wlan0 show
+        ;;
+    *)
+        echo "Unknown option: $*"
+        echo
+        print_help
         ;;
 esac

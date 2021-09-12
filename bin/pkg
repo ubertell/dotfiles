@@ -97,6 +97,7 @@ case "$1" in
         ;;
     *)
         echo "Unknown option: $*"
+        echo
         print_help
         ;;
 esac

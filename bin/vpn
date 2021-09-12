@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 print_help() {
-    echo "Usage: vpn ACTION\n"
+    echo "Usage: vpn ACTION"
     echo "ACTIONS:"
     echo " up [continent/country]    connect to a vpn."
     echo " down                      disconnect from a vpn."
@@ -66,6 +66,8 @@ case "$1" in
         curl ipinfo.io
         ;;
     *)
-        echo "w00t?"
+        echo "Unknown option: $*"
+        echo
+        print_help
         ;;
 esac
