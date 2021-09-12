@@ -1,33 +1,71 @@
 #!/bin/env bash
 
 print_help() {
-    echo "Usage: wifi ACTION\n"
+    echo "Usage: vpn ACTION\n"
     echo "ACTIONS:"
-    echo " up                   connect to a vpn."
-    echo " down                 disconnect from a vpn."
+    echo " up [continent/country]    connect to a vpn."
+    echo " down                      disconnect from a vpn."
+    echo " reset [continent/country] disconnect then reconnect."
+    echo " ip                        query ipinfo.io."
 }
 
 if [ $# -lt 1 ]; then
     print_help
     exit 0
 fi
+        
+WG="/etc/wireguard"
+
+LOCATION="europe"
+if [ "$2" ]; then
+    LOCATION="$2"
+fi
+
+CONFIGS="$WG/conf/$LOCATION"
 
 case "$1" in
     help)
         print_help
         ;;
     up)
-        CONFIG=$(sudo find /etc/wireguard/conf -type f | sort -R | head -n 1)
-        sudo ln -f -s $CONFIG /etc/wireguard/main.conf
-        sudo wg-quick up /etc/wireguard/main.conf
-        curl ipinfo.io
+        if sudo test ! -d "$CONFIGS"; then
+            echo "$CONFIGS is not a valid location"
+            exit 1
+        fi
+        NEW_CONFIG=$(sudo find $CONFIGS -type f | sort -R | head -n 1)
+        LINK=""
+        for C in {a..z}
+        do
+            TMP="$WG/${C}${C}.conf"
+            if sudo test ! -e "$TMP"; then
+                LINK=$TMP
+                break
+            fi
+        done
+        if [ ! -z "$LINK" ]; then
+            sudo ln -f -s $NEW_CONFIG $LINK
+            sudo wg-quick up "$LINK"
+        fi
         ;;
     down)
-        sudo wg-quick down /etc/wireguard/main.conf
+        for C in {z..a}
+        do
+            LINK="$WG/${C}${C}.conf"
+            if sudo test  -e "$LINK"; then
+                $(sudo wg-quick down "$LINK")
+                sudo rm "$LINK"
+                break
+            fi
+        done
         ;;
     reset)
         $0 down
-        $0 up
+        $0 up $2
+        ;;
+    ip)
+        curl ipinfo.io
+        ;;
+    *)
+        echo "w00t?"
         ;;
 esac
-
