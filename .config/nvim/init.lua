@@ -80,6 +80,11 @@ o.updatetime = 300
 -- Do not echo cmds
 o.showcmd = false
 
+-- Set default indentation
+o.shiftwidth=4
+o.tabstop=4
+o.expandtab=true
+
 --|
 --| PACKER
 --|
@@ -112,6 +117,8 @@ require('packer').startup(function()
     }
 
     use 'sainnhe/everforest'
+    use 'huyvohcmc/atlas.vim'
+    use 'aditya-azad/candle-grey'
 
     use {
         'lambdalisue/fern.vim',
@@ -247,7 +254,9 @@ require('el').setup {
 --| FILETYPES
 --|
 
-augroup('lua', { 'autocmd filetype lua setlocal shiftwidth=4 tabstop=4 expandtab' })
+
+augroup('nix', { 'autocmd filetype nix setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('yaml', { 'autocmd filetype yaml setlocal shiftwidth=2 tabstop=2 expandtab' })
 
 --|
 --| AUTO-SAVE
@@ -275,6 +284,9 @@ c 'nnoremap <C-j> <C-w>j'
 c 'nnoremap <C-k> <C-w>k'
 c 'nnoremap <C-l> <C-w>l'
 
+c 'nnoremap <silent> <s-j> :bnext<cr>'
+c 'nnoremap <silent> <s-k> :bprev<cr>'
+
 c 'nnoremap <bs> :nohl<cr>'
 
 -- wrap 
@@ -284,9 +296,10 @@ c 'noremap  <silent> <Down> gj'
 -- Tree sitter playground
 c 'nnoremap <F10> :TSHighlightCapturesUnderCursor<cr>'
 
+--
 -- File navigation 
 
-c [[nnoremap <silent> \ :execute 'Fern'  v:lua.get_project_root()<cr>]]
+-- c [[nnoremap <silent> \ :execute 'Fern'  v:lua.get_project_root()<cr>]]
 c [[nnoremap <silent> ; :execute 'Files' v:lua.get_project_root()<cr>]]
 c [[nnoremap <silent> <leader>0 :execute 'Files' $HOME<cr>]]
 
