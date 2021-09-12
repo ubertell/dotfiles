@@ -284,8 +284,8 @@ c 'nnoremap <C-j> <C-w>j'
 c 'nnoremap <C-k> <C-w>k'
 c 'nnoremap <C-l> <C-w>l'
 
-c 'nnoremap <silent> <s-j> :bnext<cr>'
-c 'nnoremap <silent> <s-k> :bprev<cr>'
+c 'nnoremap <silent> <s-p> :bnext<cr>'
+c 'nnoremap <silent> <s-m> :bprev<cr>'
 
 c 'nnoremap <bs> :nohl<cr>'
 
