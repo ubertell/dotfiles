@@ -6,3 +6,6 @@ alias tree='tree -F'
 
 alias vi='nvim'
 alias vim='nvim'
+
+alias gs='git status'
+alias ga='git add'
