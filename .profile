@@ -25,27 +25,27 @@ export HISTFILE=''
 export LESSHISTFILE=''
 
 # promt with Git
-BLUE=$(tput setaf 4)
-GRAY=$(tput setaf 244)
-GREEN=$(tput setaf 2)
-RED=$(tput setaf 1)
-YELLOW=$(tput setaf 3)
-RESET=$(tput sgr0)
+R=$(tput setaf 1)
+G=$(tput setaf 2)
+B=$(tput setaf 4)
+Y=$(tput setaf 3)
+GR=$(tput setaf 244)
+RE=$(tput sgr0)
 
 git_prompt() {
-  BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/*\(.*\)/\1/')
-
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
   if [ ! -z $BRANCH ]; then
-    echo -n "\[$YELLOW$BRANCH\]"
-
+    GIT="\[$GR/\] \[$Y$BRANCH\] "
     if [ ! -z "$(git status --short)" ]; then
-      echo "  \[${BLUE}dirty\]"
+        GIT="$GIT \[$GR/\] \[${B}dirty\]"
     fi
+    echo $GIT
+    # tput cols
   fi
 }
 
-export PS1="\[$RED\w\] \[$GRAY\]$(git_prompt)\n\[$GREEN|\] \[$RESET\]"
-export PROMPT_COMMAND='echo && export PS1="\[$RED\w\] \[$GRAY\]$(git_prompt)\n\[$GREEN|\] \[$RESET\]"'
+export PS1="\[$R\w\] \[$GR\]$(git_prompt)\n\[$G|\] \[$RE\]"
+export PROMPT_COMMAND='echo && export PS1="\[$R\w\] \[$GR\]$(git_prompt)\n\[$G|\] \[$RE\]"'
 
 # added by Nix installer
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi 
