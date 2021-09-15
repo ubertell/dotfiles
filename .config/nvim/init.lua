@@ -34,6 +34,12 @@ function get_project_root()
     return string.gsub(root, '\n', '')
 end
 
+function github_clone (user, repo, target_dir)
+    if fn.empty(fn.glob(target_dir)) > 0 then
+        c(fmt('!git clone http://github.com/%s/%s %s', user, repo, target_dir))
+    end
+end
+
 --|
 --| DIRS
 --|
@@ -50,6 +56,8 @@ c ('silent! !mkdir -p ' .. dirs['packages'])
 --|
 --| OPTIONS
 --|
+
+o.shortmess="filnxtToOFI"
 
 -- 24-bit colors.
 o.termguicolors=true
@@ -89,16 +97,34 @@ o.expandtab=true
 --| PACKER
 --|
 
-function github_clone (user, repo, target_dir)
-    if fn.empty(fn.glob(target_dir)) > 0 then
-        c(fmt('!git clone http://github.com/%s/%s %s', user, repo, target_dir))
-    end
-end
 
 github_clone('wbthomason', 'packer.nvim', dirs['packages'] .. '/packer.nvim')
 
 require('packer').startup(function()
     use 'wbthomason/packer.nvim'
+
+    use {
+        'tpope/vim-commentary',
+        'tpope/vim-repeat',
+        'tpope/vim-surround',
+        'tpope/vim-unimpaired',
+        'tpope/vim-fugitive',
+    }
+
+    use { 
+        'junegunn/gv.vim',
+        'junegunn/vim-easy-align',
+        'junegunn/vim-peekaboo',
+    }
+
+    use {
+        'junegunn/fzf', 
+        run = 'fzf#install()'
+    }
+
+    use {
+        'junegunn/fzf.vim'
+    }
 
     use {
         'nvim-treesitter/nvim-treesitter',
@@ -117,22 +143,6 @@ require('packer').startup(function()
     }
 
     use 'sainnhe/everforest'
-    use 'huyvohcmc/atlas.vim'
-    use 'aditya-azad/candle-grey'
-
-    use {
-        'lambdalisue/fern.vim',
-        requires = {'antoinemadec/FixCursorHold.nvim'}
-    }
-
-    use {
-        'lambdalisue/fern-hijack.vim',
-        requires = { 'lambdalisue/fern.vim' },
-    }
-
-    use {
-        'LumaKernel/fern-mapping-fzf.vim'
-    }
 
     use {
         'airblade/vim-gitgutter'
@@ -142,16 +152,16 @@ require('packer').startup(function()
         'justinmk/vim-sneak'
     }
 
+
     use {
-        'junegunn/fzf', 
-        run = 'fzf#install()'
+        'bakpakin/janet.vim'
     }
 
     use {
-        'junegunn/fzf.vim'
+        'guns/vim-sexp',
+        'tpope/vim-sexp-mappings-for-regular-people'
     }
 
-    
 end)
 
 --|
@@ -161,6 +171,12 @@ end)
 vim.env.FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 g.fzf_layout = { window = 'enew' }
 g.fzf_preview_window = {}
+
+--|
+--| Peekaboo
+--|
+
+g.peekaboo_window = 'enew'
 
 --|
 --| Fern
@@ -181,7 +197,7 @@ g['sneak#s_next'] = 0
 --|
 
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { 'lua', 'julia' },
+    ensure_installed = { 'lua', 'nix' },
     highlight = {
         enable = true,
         disable = {},
@@ -276,6 +292,7 @@ augroup('autosave', {'autocmd CursorHold * silent! call v:lua.save()'})
 --|
 
 g.mapleader = " "
+g.maplocalleader = ","
 
 c 'inoremap jk <esc>'
 
@@ -284,12 +301,11 @@ c 'nnoremap <C-j> <C-w>j'
 c 'nnoremap <C-k> <C-w>k'
 c 'nnoremap <C-l> <C-w>l'
 
-c 'nnoremap <silent> <s-p> :bnext<cr>'
-c 'nnoremap <silent> <s-m> :bprev<cr>'
-
 c 'nnoremap <bs> :nohl<cr>'
 
 -- wrap 
+c 'noremap  <silent> k      gk'
+c 'noremap  <silent> j      gj'
 c 'noremap  <silent> <up>   gk'
 c 'noremap  <silent> <Down> gj'
 
