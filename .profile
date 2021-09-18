@@ -24,7 +24,5 @@ export MOZ_ENABLE_WAYLAND=1
 export HISTFILE=''
 export LESSHISTFILE=''
 
-. $HOME/.prompt
-
-# added by Nix installer
-if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi 
+# opam configuration
+test -r $HOME/.opam/opam-init/init.sh && . $HOME/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true

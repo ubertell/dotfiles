@@ -8,3 +8,5 @@ _ZL_CMD='j' eval "$(lua $HOME/bin/z.lua --init bash enhanced once )"
 eval "$(direnv hook bash)"
 
 . "$HOME/.alias"
+
+. "$HOME/.prompt"
