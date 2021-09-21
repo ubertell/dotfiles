@@ -1,8 +1,6 @@
--- deps: mkdir, git, gcc, libstdc++, python 3, fzf, ag
-
--- TODO: file nav, git + file-git-menu, lsp
-
--- Check, luna, nv
+--#
+--# deps: (mkdir, ag, fzf, git, gcc, libstdc++, python 3)
+--#
 
 --|
 --| HELPERS
@@ -97,12 +95,10 @@ o.expandtab=true
 --| PACKER
 --|
 
-
 github_clone('wbthomason', 'packer.nvim', dirs['packages'] .. '/packer.nvim')
 
 require('packer').startup(function()
     use 'wbthomason/packer.nvim'
-
     use {
         'tpope/vim-commentary',
         'tpope/vim-repeat',
@@ -110,62 +106,41 @@ require('packer').startup(function()
         'tpope/vim-unimpaired',
         'tpope/vim-fugitive',
     }
-
-    use { 
-        'junegunn/gv.vim',
-        'junegunn/vim-easy-align',
-        'junegunn/vim-peekaboo',
-    }
-
     use {
         'junegunn/fzf', 
         run = 'fzf#install()'
     }
-
-    use {
-        'junegunn/fzf.vim'
+    use { 
+        'junegunn/fzf.vim',
+        'junegunn/gv.vim',
+        'junegunn/vim-easy-align',
+        'junegunn/vim-peekaboo',
     }
-
+    use 'sainnhe/everforest'
+    use {
+        'tjdevries/express_line.nvim',
+        requires = {'nvim-lua/plenary.nvim'}
+    }
+    use {
+        'airblade/vim-gitgutter'
+    }
+    use {
+        'justinmk/vim-sneak'
+    }
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate'
     }
-
     use {
         'nvim-treesitter/playground',
         run = ':TSInstall query',
         requires = {'nvim-treesitter/nvim-treesitter'}
     }
 
-    use {
-        'tjdevries/express_line.nvim',
-        requires = {'nvim-lua/plenary.nvim'}
-    }
-
-    use 'sainnhe/everforest'
-
-    use {
-        'airblade/vim-gitgutter'
-    }
-
-    use {
-        'justinmk/vim-sneak'
-    }
-
-
-    use {
-        'bakpakin/janet.vim'
-    }
-
-    use {
-        'guns/vim-sexp',
-        'tpope/vim-sexp-mappings-for-regular-people'
-    }
-
 end)
 
 --|
---| Fzf
+--| FZF
 --|
 
 vim.env.FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
@@ -173,20 +148,20 @@ g.fzf_layout = { window = 'enew' }
 g.fzf_preview_window = {}
 
 --|
---| Peekaboo
+--| PEEKABOO
 --|
 
 g.peekaboo_window = 'enew'
 
 --|
---| Fern
+--| FERN
 --|
 
 g['fern#default_hidden'] = 1
 g['fern#default_exclude'] = '.git'
 
 --|
---| Sneak
+--| SNEAK
 --|
 
 g['sneak#label'] = 1
@@ -197,7 +172,7 @@ g['sneak#s_next'] = 0
 --|
 
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { 'lua', 'nix' },
+    ensure_installed = { 'lua', 'nix', 'ocaml' },
     highlight = {
         enable = true,
         disable = {},
@@ -226,8 +201,9 @@ require('nvim-treesitter.configs').setup {
     }
 }
 
+
 --|
---| EXPRESS STATUS LINE
+--| STATUS LINE
 --|
 
 require('el').setup {
@@ -270,12 +246,12 @@ require('el').setup {
 --| FILETYPES
 --|
 
-
-augroup('nix', { 'autocmd filetype nix setlocal shiftwidth=2 tabstop=2 expandtab' })
-augroup('yaml', { 'autocmd filetype yaml setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('nix',   { 'autocmd filetype nix   setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('yaml',  { 'autocmd filetype yaml  setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('ocaml', { 'autocmd filetype ocaml setlocal shiftwidth=2 tabstop=2 expandtab' })
 
 --|
---| AUTO-SAVE
+--| AUTOSAVE
 --|
 
 function _G.save()
@@ -295,43 +271,32 @@ g.mapleader = " "
 g.maplocalleader = ","
 
 c 'inoremap jk <esc>'
-
 c 'nnoremap <C-h> <C-w>h'
 c 'nnoremap <C-j> <C-w>j'
 c 'nnoremap <C-k> <C-w>k'
 c 'nnoremap <C-l> <C-w>l'
-
 c 'nnoremap <bs> :nohl<cr>'
+c 'nnoremap <silent> k      gk'
+c 'nnoremap <silent> j      gj'
+c 'nnoremap <silent> <up>   gk'
+c 'nnoremap <silent> <Down> gj'
 
--- wrap 
-c 'noremap  <silent> k      gk'
-c 'noremap  <silent> j      gj'
-c 'noremap  <silent> <up>   gk'
-c 'noremap  <silent> <Down> gj'
-
--- Tree sitter playground
 c 'nnoremap <F10> :TSHighlightCapturesUnderCursor<cr>'
 
---
--- File navigation 
-
--- c [[nnoremap <silent> \ :execute 'Fern'  v:lua.get_project_root()<cr>]]
-c [[nnoremap <silent> ; :execute 'Files' v:lua.get_project_root()<cr>]]
+c [[nnoremap <silent> <leader>f :execute 'Files' v:lua.get_project_root()<cr>]]
 c [[nnoremap <silent> <leader>0 :execute 'Files' $HOME<cr>]]
 
 --|
 --| COLORSCHEME
 --|
 
+o.background = 'dark'
 g.everforest_background = 'hard'
 g.everforest_disable_italic_comment = 1
-
-o.background = 'dark'
-
 c 'colorscheme everforest'
 
 --|
---| CUSTOM COLORS
+--| COLORS
 --|
 
 function hi_none(gs)
@@ -343,3 +308,5 @@ end
 hi_none {
     'SignColumn'
 }
+
+c [[set rtp^="/home/tell/.opam/4.12.0/share/ocp-indent/vim"]]
