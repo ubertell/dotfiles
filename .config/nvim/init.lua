@@ -24,7 +24,7 @@ function augroup(name, commands)
     c 'augroup END'
 end
 
-function get_project_root() 
+function get_project_root()
     root = fn.system('git rev-parse --show-toplevel 2> /dev/null')
     if root == '' then
         return fn.getcwd()
@@ -68,7 +68,7 @@ o.undofile = true
 o.signcolumn = 'yes'
 
 -- ignore case, unless upper-case.
-o.ignorecase = true 
+o.ignorecase = true
 o.smartcase = true
 
 -- no mode indicator.
@@ -80,7 +80,7 @@ o.mouse = 'a'
 -- no swap-file
 o.swapfile = false
 
--- update timeout in ms. 
+-- update timeout in ms.
 o.updatetime = 300
 
 -- Do not echo cmds
@@ -107,16 +107,21 @@ require('packer').startup(function()
         'tpope/vim-fugitive',
     }
     use {
-        'junegunn/fzf', 
+        'junegunn/fzf',
         run = 'fzf#install()'
     }
-    use { 
+    use {
         'junegunn/fzf.vim',
         'junegunn/gv.vim',
         'junegunn/vim-easy-align',
         'junegunn/vim-peekaboo',
     }
-    use 'sainnhe/everforest'
+    use {
+        'dense-analysis/ale'
+    }
+    use {
+        'sainnhe/everforest'
+    }
     use {
         'tjdevries/express_line.nvim',
         requires = {'nvim-lua/plenary.nvim'}
@@ -136,8 +141,35 @@ require('packer').startup(function()
         run = ':TSInstall query',
         requires = {'nvim-treesitter/nvim-treesitter'}
     }
-
 end)
+
+--|
+--| AUTOSAVE
+--|
+
+function _G.save()
+    if 1 == e '&modified' then
+        c 'execute "ALEFix | update"'
+    end
+end
+
+augroup('autosave', {'autocmd CursorHold * silent! call v:lua.save()'})
+
+--|
+--| ALE
+--|
+
+g.ale_sign_error   = "▸"
+g.ale_sign_warning = "▸"
+
+g.ale_fixers = {
+    ['*'] = { 'remove_trailing_lines', 'trim_whitespace' },
+    ['c'] = { 'clang-format' }
+}
+
+g.ale_linters = {
+    ['c'] = {'clang'}
+}
 
 --|
 --| FZF
@@ -157,8 +189,8 @@ g.peekaboo_window = 'enew'
 --| FERN
 --|
 
-g['fern#default_hidden'] = 1
-g['fern#default_exclude'] = '.git'
+-- g['fern#default_hidden'] = 1
+-- g['fern#default_exclude'] = '.git'
 
 --|
 --| SNEAK
@@ -172,7 +204,7 @@ g['sneak#s_next'] = 0
 --|
 
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { 'lua', 'nix', 'ocaml' },
+    ensure_installed = { 'lua', 'nix', 'ocaml', 'c' },
     highlight = {
         enable = true,
         disable = {},
@@ -208,13 +240,14 @@ require('nvim-treesitter.configs').setup {
 
 require('el').setup {
     generator = function(win_id)
-        local extensions = require('el.extensions')
-        local sections = require('el.sections')
-        local builtin = require('el.builtin')
-        local subscribe = require('el.subscribe')
+        local extensions     = require('el.extensions')
+        local sections       = require('el.sections')
+        local builtin        = require('el.builtin')
+        local subscribe      = require('el.subscribe')
         local lsp_statusline = require('el.plugins.lsp_status')
+
         return {
-            extensions.mode,
+            -- extensions.mode,
             sections.split,
             builtin.file,
             sections.collapse_builtin {
@@ -224,13 +257,6 @@ require('el').setup {
             sections.split,
             lsp_statusline.segment,
             lsp_statusline.current_function,
-            -- helper.async_buf_setter(
-            --   win_id,
-            --   'el_git_stat',
-            --   extensions.git_changes,
-            --   5000
-            -- ),
-            -- '[', builtin.line, ' : ',  builtin.column, ']',
             sections.collapse_builtin{
                 '[',
                 builtin.help_list,
@@ -246,22 +272,10 @@ require('el').setup {
 --| FILETYPES
 --|
 
+augroup('c',     { 'autocmd filetype c     setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('nix',   { 'autocmd filetype nix   setlocal shiftwidth=2 tabstop=2 expandtab' })
-augroup('yaml',  { 'autocmd filetype yaml  setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('ocaml', { 'autocmd filetype ocaml setlocal shiftwidth=2 tabstop=2 expandtab' })
-
---|
---| AUTOSAVE
---|
-
-function _G.save()
-    if 1 == e '&modified' then
-        vim.lsp.buf.formatting_sync()
-        c 'execute "update"'
-    end
-end
-
-augroup('autosave', {'autocmd CursorHold * silent! call v:lua.save()'})
+augroup('yaml',  { 'autocmd filetype yaml  setlocal shiftwidth=2 tabstop=2 expandtab' })
 
 --|
 --| KEYS
@@ -299,6 +313,8 @@ c 'colorscheme everforest'
 --| COLORS
 --|
 
+c 'hi comment gui=none'
+
 function hi_none(gs)
     for _, g in ipairs(gs) do
         c (fmt ('highlight %s guifg=none guibg=none', g))
@@ -306,7 +322,10 @@ function hi_none(gs)
 end
 
 hi_none {
-    'SignColumn'
+    'SignColumn',
+    'ALEErrorSign',
+    'ALEWarningSign'
 }
 
-c [[set rtp^="/home/tell/.opam/4.12.0/share/ocp-indent/vim"]]
+c 'hi ALEErrorSign   guifg=#e67e80'
+c 'hi ALEWarningSign guifg=#dbbc7f'
