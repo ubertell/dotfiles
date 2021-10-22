@@ -6,14 +6,13 @@
 --|
 
 
-a   = vim.a
+api = vim.api
 c   = vim.cmd
 e   = vim.api.nvim_eval
-g   = vim.g
-fn  = vim.fn
-o   = vim.opt
 env = vim.env
-
+fn  = vim.fn
+g   = vim.g
+o   = vim.opt
 fmt = string.format
 
 function augroup(name, commands)
@@ -145,6 +144,7 @@ require('packer').startup(function()
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
   }
+  use 'theHamsta/nvim-treesitter-commonlisp'
   use {
     'nvim-treesitter/playground',
     run = ':TSInstall query',
@@ -243,25 +243,27 @@ require('nvim-treesitter.configs').setup {
 --|
 
 
--- TODO: Clean this hack up
-function _G.make_statusline(n)
-    active  = n == fn.winnr()
-    win     = fn.win_getid(n)
-    width   = vim.api.nvim_win_get_width(win)
-    bufnr   = fn.winbufnr(n)
-    bufname = " " .. fn.bufname(bufnr) .. " "
-    bufft   = " " .. vim.api.nvim_buf_get_option(bufnr, 'filetype') .. " "
-    if bufname == "  " then
-      bufname = " [No Name] "
-    end
-    if bufft == "  " then
-      bufft = ""
-    end
+function _G.make_statusline(wnr)
+    active = wnr == fn.winnr()
+    width  = api.nvim_win_get_width(fn.win_getid(wnr))
+    bnr    = fn.winbufnr(wnr)
+    bname  = fn.bufname(bnr)
+    bname  = bname == "" and "NO NAME" or bname
+    bname  = " " .. bname .. " "
+    bft    = vim.api.nvim_buf_get_option(bnr, 'filetype')
+    bft    = bft == "" and "NONE" or bft
+    bft    = " " .. string.upper(bft) .. " "
     if active then
-        return 
-            "——" .. bufname .."——%=" ..
-            string.rep("—", width - #bufname - #bufft - 15) .. 
-            "— %4l ——" .. string.upper(bufft) .. "——"
+        filler = string.rep("—", width - #bname - #bft - 18)
+        return  "——"    ..  -- 2
+                bname   .. 
+                "——"    ..  -- 2
+                filler  .. 
+                "——"    ..  -- 2
+                " %4l " ..  -- 6
+                "——"    ..  -- 2
+                bft     .. 
+                "————"      -- 4
     else
         return string.rep("—", width)
     end
