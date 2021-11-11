@@ -73,7 +73,7 @@ c ('silent! !mkdir -p ' .. dirs['packages'])
 o.shortmess="filnxtToOFI"
 
 -- 24-bit colors.
-o.termguicolors=true
+o.termguicolors = true
 
 -- save undo history to an undo file.
 o.undodir = dirs["undo"]
@@ -102,12 +102,12 @@ o.updatetime = 200
 o.showcmd = false
 
 -- Set default indentation
-o.shiftwidth=4
-o.tabstop=4
-o.expandtab=true
+o.shiftwidth = 4
+o.tabstop = 4
+o.expandtab = true
 
 -- Command line height
-o.cmdheight=1
+o.cmdheight = 1
 
 
 --|
@@ -137,8 +137,12 @@ require('packer').startup(function()
     'vlime/vlime',
   }
   use {
+    'eraserhd/parinfer-rust', 
+    run = 'cargo build --release'
+  }
+  use {
     'junegunn/fzf',
-    run = 'fzf#install()'
+    run = ':call fzf#install()'
   }
   use {
     'nvim-treesitter/nvim-treesitter',
@@ -172,13 +176,43 @@ augroup('autosave', {'autocmd CursorHold * silent! call v:lua.save()'})
 --|
 
 
-g.vlime_cl_impl = "ros"
+g.vlime_compiler_policy = {["DEBUG"] = 3}
 
+g.vlime_cl_impl = "ros"
 c [[
 function! VlimeBuildServerCommandFor_ros(vlime_loader, vlime_eval)
   return ["ros", "run", "--load", a:vlime_loader, "--eval", a:vlime_eval ]
 endfunction
 ]]
+
+g.vlime_window_settings = {
+  ['repl'] = {
+    ['pos']      = 'botright',
+    ['size']     = null,
+    ['vertical'] = true
+  },
+  ['arglist'] = {
+    ['pos']      = 'topleft',
+    ['size']     = 1,
+  },
+  ['preview'] = {
+    ['pos']      = 'topleft',
+    ['size']     = 5,
+  }
+}
+
+
+--|
+--| SEXP
+--|
+
+
+g.sexp_enable_insert_mode_mappings = false
+
+g.sexp_mappings = {
+  ['sexp_indent'] = '',
+  ['sexp_indent_top'] = '',
+}
 
 
 --|
@@ -207,11 +241,11 @@ g.peekaboo_window = 'enew'
 
 require('nvim-treesitter.configs').setup {
   ensure_installed = {
-    'lua', 'c', 'commonlisp'
+    'lua', 'c'
   },
   highlight = {
     enable = true,
-    disable = {},
+    disable = {'commonlisp'},
     additional_vim_regex_highlighting = false,
   },
   indent = {
@@ -282,6 +316,28 @@ o.statusline="%{%v:lua.make_statusline()%}"
 -- return math.ceil(max_width * vim.api.nvim_win_get_width(window.win_id))
 
 --|
+--| Tabline
+--| 
+
+function _G.tabLine() 
+    nums = { [0] = 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII' }
+    current = fn.tabpagenr()
+    s = "%="
+    for n = 1,vim.fn.tabpagenr('$'),1 do 
+        if n == current then 
+            s = s .. '%#TabLineSel#'
+        else
+            s = s .. '%#TabLine#'
+        end 
+        s = s .. ' ' .. nums[(n - 1) % 7] .. ' '
+    end
+	s = s .. '%#TabLineFill#%T'
+    return s
+end
+
+o.tabline="%!v:lua.tabLine()"
+
+--|
 --| FILETYPES
 --|
 
@@ -290,15 +346,18 @@ augroup('c',     { 'autocmd filetype c     setlocal shiftwidth=2 tabstop=2 expan
 augroup('html',  { 'autocmd filetype html  setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('lua',   { 'autocmd filetype lua   setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('yaml',  { 'autocmd filetype yaml  setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('asd',   { 'autocmd BufRead,BufNewFile *.asd set filetype=lisp' })
 
 
 --|
 --| KEYS
 --|
 
+c 'nnoremap <localleader>; ;'
+c 'nnoremap ; <nop>'
 
 g.mapleader = " "
-g.maplocalleader = ","
+g.maplocalleader = ";"
 
 
 c 'inoremap jk <esc>'
@@ -312,7 +371,7 @@ c 'nnoremap <silent> k      gk'
 c 'nnoremap <silent> j      gj'
 c 'nnoremap <silent> <up>   gk'
 c 'nnoremap <silent> <Down> gj'
-
+ 
 c 'nnoremap <F10> :TSHighlightCapturesUnderCursor<cr>'
 
 c [[nnoremap <silent> <leader>f :execute 'Files' v:lua.get_project_root()<cr>]]
@@ -336,15 +395,29 @@ c 'colorscheme everforest'
 --| COLORS
 --|
 
+-- VIM
 
-c 'hi Comment      gui=none'
-c 'hi SignColumn   gui=none guibg=none guifg=#666666'
 c 'hi StatusLine   guibg=none'
 c 'hi StatusLineNC gui=none guibg=none guifg=#666666'
 c 'hi Visual       guibg=#484848'
+c 'hi EndOfBuffer  guifg=#2b3339'
+c 'hi TabLine      guifg=#859289 guibg=none'
+c 'hi TabLineFill  guifg=#d3c6aa guibg=none'
+c 'hi TabLineSel   guifg=#d3c6aa guibg=none'
 
--- c 'hi ErrorText gui=none'
+-- COMMON LISP
 
--- c 'hi GreenSign guibg=none'
--- c 'hi BlueSign  guibg=none'
--- c 'hi RedSign   guibg=none'
+c 'hi! link CL_BQ       Red'
+c 'hi! link CL_BQParen  Red'
+c 'hi! link CL_Comma    Yellow'
+c 'hi! link CL_CommaAt  Yellow'
+c 'hi! link CL_Comment  Comment'
+c 'hi! link CL_Function Orange'
+c 'hi! link CL_Hash     Orange'
+c 'hi! link CL_Q        Blue'
+c 'hi! link CL_QParen   Blue'
+c 'hi! link CL_String   Green'
+c 'hi! link CL_StringQ  Green'
+
+c 'hi! CL_Paren guifg=#858585'
+
