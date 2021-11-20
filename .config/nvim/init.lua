@@ -121,7 +121,6 @@ require('packer').startup(function()
   use 'wbthomason/packer.nvim'
   use {
     'airblade/vim-gitgutter',
-    'guns/vim-sexp',
     'junegunn/fzf.vim',
     'junegunn/gv.vim',
     'junegunn/vim-easy-align',
@@ -131,10 +130,10 @@ require('packer').startup(function()
     'tpope/vim-commentary',
     'tpope/vim-fugitive',
     'tpope/vim-repeat',
-    'tpope/vim-sexp-mappings-for-regular-people',
     'tpope/vim-surround',
     'tpope/vim-unimpaired',
     'vlime/vlime',
+    'morhetz/gruvbox',
   }
   use {
     'eraserhd/parinfer-rust', 
@@ -175,10 +174,10 @@ augroup('autosave', {'autocmd CursorHold * silent! call v:lua.save()'})
 --| VLIME
 --|
 
-
 g.vlime_compiler_policy = {["DEBUG"] = 3}
 
 g.vlime_cl_impl = "ros"
+
 c [[
 function! VlimeBuildServerCommandFor_ros(vlime_loader, vlime_eval)
   return ["ros", "run", "--load", a:vlime_loader, "--eval", a:vlime_eval ]
@@ -199,19 +198,6 @@ g.vlime_window_settings = {
     ['pos']      = 'topleft',
     ['size']     = 5,
   }
-}
-
-
---|
---| SEXP
---|
-
-
-g.sexp_enable_insert_mode_mappings = false
-
-g.sexp_mappings = {
-  ['sexp_indent'] = '',
-  ['sexp_indent_top'] = '',
 }
 
 
@@ -399,7 +385,7 @@ c 'colorscheme everforest'
 
 c 'hi StatusLine   guibg=none'
 c 'hi StatusLineNC gui=none guibg=none guifg=#666666'
-c 'hi Visual       guibg=#484848'
+c 'hi Visual       guibg=#424648'
 c 'hi EndOfBuffer  guifg=#2b3339'
 c 'hi TabLine      guifg=#859289 guibg=none'
 c 'hi TabLineFill  guifg=#d3c6aa guibg=none'
@@ -407,17 +393,30 @@ c 'hi TabLineSel   guifg=#d3c6aa guibg=none'
 
 -- COMMON LISP
 
-c 'hi! link CL_BQ       Red'
-c 'hi! link CL_BQParen  Red'
-c 'hi! link CL_Comma    Yellow'
-c 'hi! link CL_CommaAt  Yellow'
-c 'hi! link CL_Comment  Comment'
-c 'hi! link CL_Function Orange'
-c 'hi! link CL_Hash     Orange'
-c 'hi! link CL_Q        Blue'
-c 'hi! link CL_QParen   Blue'
-c 'hi! link CL_String   Green'
-c 'hi! link CL_StringQ  Green'
+c 'hi! link CL_Backquote      Red'
+c 'hi! link CL_BackquoteParen Red'
+c 'hi! link CL_Comma          Yellow'
+c 'hi! link CL_Comma          Yellow'
+c 'hi! link CL_CommaAt        Yellow'
+c 'hi! link CL_CommaAtParen   Yellow'
+c 'hi! link CL_CommaParen     Yellow'
+c 'hi! link CL_Comment        Comment'
+c 'hi! link CL_Function       Purple'
+c 'hi! link CL_KeywordColon   Green'
+c 'hi! link CL_Paren          Comment'
+c 'hi! link CL_Quote          Blue'
+c 'hi! link CL_QuoteParen     Blue'
+c 'hi! link CL_VectorParen    Aqua'
 
-c 'hi! CL_Paren guifg=#858585'
+c 'hi CL_ParameterModifier gui=italic'
+
+c 'hi! CL_String      guifg=#b99f80'
+c 'hi! CL_StringQuote guifg=#b99f80'
+
+c 'hi! link Constant         CL_String'
+c 'hi! link vlime_replString CL_String'
+
+c 'hi CL_PackageColon guifg=#aaaaa0'
+-- c 'hi CL_PackageColonContext guifg=#aaaaa0'
+-- c 'hi! CL_StringQuote guifg=#b2a488'
 

@@ -8,34 +8,44 @@ menu=( \
     soundcards \
     tracks \
     wifi \
+    emacs \
+    nyxt \
 )
 
 choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf)
 
-case "$choice" in
-	books)
-        DIR=$HOME/fil/books
-        FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
-        if [ -f "$FILE" ]; then
-            setsid swaymsg -t command exec "zathura $FILE";
-        fi
-		;;
-    mixes)
-        DIR=$HOME/fil/music/mixes
-        FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
-        mpv --no-video $FILE
-        ;;
-    soundcards)
-        cat /proc/asound/modules
-        read -n 1 -p ... 
-        ;;
-    tracks)
-        mpv --shuffle --no-video $HOME/fil/music/tracks
-        ;;
-    wifi)
-        iwctl
-        ;;
-	*)
-        setsid swaymsg -t command exec "$choice"
-		;;
-esac
+if [ $? = 0 ]; then
+    case "$choice" in
+        books)
+            DIR=$HOME/fil/books
+            FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
+            if [ -f "$FILE" ]; then
+                setsid swaymsg -t command exec "zathura $FILE";
+            fi
+            ;;
+        luakit)
+            setsid swaymsg -t command exec "luakit"
+            ;;
+        mixes)
+            DIR=$HOME/fil/music/mixes
+            FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
+            mpv --no-video $FILE
+            ;;
+        soundcards)
+            cat /proc/asound/modules
+            read -n 1 -p ...
+            ;;
+        tracks)
+            mpv --shuffle --no-video $HOME/fil/music/tracks
+            ;;
+        wifi)
+            iwctl
+            ;;
+        emacs)
+            setsid swaymsg -t command exec "emacs"
+            ;;
+        *)
+            setsid swaymsg -t command exec "$choice"
+            ;;
+    esac
+fi

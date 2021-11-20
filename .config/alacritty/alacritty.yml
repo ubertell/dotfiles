@@ -10,7 +10,7 @@ window:
     y: 5
 
   title: terminal
-  
+
   class:
     instance: terminal
     general: terminal
@@ -24,17 +24,20 @@ font:
   size: 19.0
 
   normal:
-    family: Fira Code
+    # family: PragmataPro Mono
+    # family: Fira Code
+    family: Input Mono
+    style: Regular
 
   bold:
     style: Medium
 
   bold_italic:
-    style: Medium
+    style: Medium Italic
 
 draw_bold_text_with_bright_colors: false
 
-background_opacity: 0.96
+background_opacity: 0.97
 
 selection:
   save_to_clipboard: true
@@ -43,6 +46,30 @@ mouse_bindings:
   - { mouse: Middle, action: PasteSelection }
 
 schemes:
+  selenized: &selenized
+
+    primary:
+      background: '0x103c48'
+      foreground: '0xadbcbc'
+    normal:
+      black:   '0x184956'
+      red:     '0xfa5750'
+      green:   '0x75b938'
+      yellow:  '0xdbb32d'
+      blue:    '0x4695f7'
+      magenta: '0xf275be'
+      cyan:    '0x41c7b9'
+      white:   '0x72898f'
+    bright:
+      black:   '0x2d5b69'
+      red:     '0xff665c'
+      green:   '0x84c747'
+      yellow:  '0xebc13d'
+      blue:    '0x58a3ff'
+      magenta: '0xff84cd'
+      cyan:    '0x53d6c7'
+      white:   '0xcad8d9'
+
   everforest_dark_hard: &everforest_dark_hard
 
     primary:
@@ -95,5 +122,57 @@ schemes:
       cyan:    '#83c092'
       white:   '#d3c6aa'
 
-colors: *everforest_dark_hard
+  alabaster: &alabaster
 
+    primary:
+      background: '#f7f7f7'
+      foreground: '#000000' 
+
+    normal:
+      black:  '#000000'
+      red:    '#aa3731'
+      green:  '#448c27'
+      yellow: '#cb9000'
+      blue:   '#325cc0'
+      purple: '#7a3e9d'
+      cyan:   '#0083b2'
+      white:  '#f7f7f7'
+
+    bright:
+      black:  '#777777'
+      red:    '#f05050'
+      green:  '#60cb00'
+      yellow: '#ffbc5d'
+      blue:   '#007acc'
+      purple: '#e64ce6'
+      cyan:   '#00aacb'
+      white:  '#f7f7f7'
+
+  terminalbasic: &terminalbasic
+
+    primary:
+      background: '#ffffff'
+      foreground: '#000000'
+
+    normal:
+      black:  '#000000'
+      red:    '#990000'
+      green:  '#00a600'
+      yellow: '#999900'
+      blue:   '#0000b2'
+      purple: '#b200b2'
+      cyan:   '#00a6b2'
+
+    bright:
+      white:  '#bfbfbf'
+      black:  '#666666'
+      red:    '#e50000'
+      green:  '#00d900'
+      yellow: '#e5e500'
+      blue:   '#0000ff'
+      purple: '#e500e5'
+      cyan:   '#00e5e5'
+      white:  '#e5e5e5'
+
+
+colors: *everforest_dark_hard
