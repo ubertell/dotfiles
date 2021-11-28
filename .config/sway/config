@@ -1,5 +1,4 @@
 # Colors (everforest)
-
 set $black   #4b565c
 set $red     #e67e80
 set $green   #a7c080
@@ -12,24 +11,21 @@ set $black0  #000000
 set $black1  #231f20
 
 # Borders               title     title-bg title-text new-indi childborder
-client.focused          $white    $white   $black     $white   $red
-client.focused_inactive $black    $black   $white     $white   $black
+client.focused          $white    $white   $black0    $white   $red
+client.focused_inactive $black0   $black   $white     $white   $black
 client.unfocused        $black0   $black1  $white     $white   $black
 client.urgent           $white    $white   $red       $white   $black
 
 # Layout
-
 default_border pixel 2
 hide_edge_borders --i3 smart
 
 # Hide mouse-pointer after 1 s
-
 seat * hide_cursor 1000
 
 # Screens
 
 # hint: swaymsg -t get_outputs
-
 output DP-2  pos 0    0 res 3840x2160 scale 1
 output eDP-1 pos 3840 0 res 3840x2400 scale 1
 
@@ -37,16 +33,12 @@ bindswitch --reload lid:on  output eDP-1 disable
 bindswitch --reload lid:off output eDP-1 enable
 
 # Set background
+output * bg $HOME/fil/pictures/wallpapers/tree.png fill
 
-output * bg $HOME/files/pics/tree.png fill
-
-#
 # Keyboard
-#
-
 input * {
 	xkb_options ctrl:nocaps
-	repeat_delay 185
+	repeat_delay 200
 	repeat_rate 55
 }
 
@@ -60,9 +52,9 @@ bindsym $mod+w kill
 
 bindsym $mod+Return exec alacritty
 
-for_window [app_id="^menu$"]  floating enable,border pixel 5,resize set 900 500
+for_window [app_id="^menu$"] floating enable,border pixel 4,resize set 900 700
 
-bindsym $mod+d exec alacritty --class=menu -e /bin/sh -c $HOME/bin/launcher
+bindsym $mod+d exec alacritty --class=menu -e /bin/bash -c $HOME/bin/launcher
 
 bindsym $mod+down exec swaylock -f -i $HOME/files/pics/stickman.jpg -s center -c 1c1c1c -e
 
@@ -83,6 +75,7 @@ bindsym $mod+Shift+$right move right
 
 bindsym $mod+f fullscreen
 bindsym $mod+a focus parent
+bindsym $mod+Shift+A focus child
 
 bindsym $mod+space       focus    mode_toggle
 bindsym $mod+Shift+space floating toggle
@@ -142,11 +135,9 @@ bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
 # Fn keys
-
 bindsym XF86MonBrightnessUp   exec light -A 5
 bindsym XF86MonBrightnessDown exec light -U 5
-
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@   +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@   -5%
-bindsym XF86AudioMute        exec pactl set-sink-mute   @DEFAULT_SINK@   toggle
-bindsym XF86AudioMicMute     exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86AudioRaiseVolume  exec pactl set-sink-volume @DEFAULT_SINK@   +5%
+bindsym XF86AudioLowerVolume  exec pactl set-sink-volume @DEFAULT_SINK@   -5%
+bindsym XF86AudioMute         exec pactl set-sink-mute   @DEFAULT_SINK@   toggle
+bindsym XF86AudioMicMute      exec pactl set-source-mute @DEFAULT_SOURCE@ toggle

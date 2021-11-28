@@ -1,10 +1,8 @@
 --# deps: (mkdir, ag, fzf, git, gcc, libstdc++, python 3)
 
-
 --|
 --| HELPERS
 --|
-
 
 api = vim.api
 c   = vim.cmd
@@ -49,11 +47,9 @@ function _G.show(...)
   return ...
 end
 
-
 --|
 --| DIRS
 --|
-
 
 dirs = {}
 
@@ -64,11 +60,9 @@ dirs['undo']     = dirs['data'] .. '/undo'
 c ('silent! !mkdir -p ' .. dirs['undo'])
 c ('silent! !mkdir -p ' .. dirs['packages'])
 
-
 --|
 --| OPTIONS
 --|
-
 
 o.shortmess="filnxtToOFI"
 
@@ -109,11 +103,9 @@ o.expandtab = true
 -- Command line height
 o.cmdheight = 1
 
-
 --|
 --| PACKER
 --|
-
 
 github_clone('wbthomason', 'packer.nvim', dirs['packages'] .. '/packer.nvim')
 
@@ -126,6 +118,7 @@ require('packer').startup(function()
     'junegunn/vim-easy-align',
     'junegunn/vim-peekaboo',
     'mhinz/vim-sayonara',
+    'morhetz/gruvbox',
     'sainnhe/everforest',
     'tpope/vim-commentary',
     'tpope/vim-fugitive',
@@ -133,7 +126,6 @@ require('packer').startup(function()
     'tpope/vim-surround',
     'tpope/vim-unimpaired',
     'vlime/vlime',
-    'morhetz/gruvbox',
   }
   use {
     'eraserhd/parinfer-rust', 
@@ -147,7 +139,6 @@ require('packer').startup(function()
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
   }
-  use 'theHamsta/nvim-treesitter-commonlisp'
   use {
     'nvim-treesitter/playground',
     run = ':TSInstall query',
@@ -155,11 +146,9 @@ require('packer').startup(function()
   }
 end)
 
-
 --|
 --| AUTOSAVE
 --|
-
 
 function _G.save()
   if 1 == e '&modified' then
@@ -169,6 +158,12 @@ end
 
 augroup('autosave', {'autocmd CursorHold * silent! call v:lua.save()'})
 
+--|
+--| NETWR
+--|
+
+g.netrw_liststyle = 3
+g.netrw_banner = 0
 
 --|
 --| VLIME
@@ -200,34 +195,28 @@ g.vlime_window_settings = {
   }
 }
 
-
 --|
 --| FZF
 --|
-
 
 vim.env.FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 
 g.fzf_layout = { window = 'enew' }
 g.fzf_preview_window = {}
 
-
 --|
 --| PEEKABOO
 --|
 
-
 g.peekaboo_window = 'enew'
-
 
 --|
 --| TREESITTER
 --|
 
-
 require('nvim-treesitter.configs').setup {
   ensure_installed = {
-    'lua', 'c'
+    'lua', 'c', 'typescript'
   },
   highlight = {
     enable = true,
@@ -257,11 +246,9 @@ require('nvim-treesitter.configs').setup {
   }
 }
 
-
 --|
 --| STATUS LINE
 --|
-
 
 function _G.make_statusline(wnr)
     active = wnr == fn.winnr()
@@ -299,8 +286,6 @@ augroup('statusline', { 'autocmd VimEnter,WinEnter,BufWinEnter * call v:lua.refr
 
 o.statusline="%{%v:lua.make_statusline()%}"
 
--- return math.ceil(max_width * vim.api.nvim_win_get_width(window.win_id))
-
 --|
 --| Tabline
 --| 
@@ -327,13 +312,14 @@ o.tabline="%!v:lua.tabLine()"
 --| FILETYPES
 --|
 
+augroup('c',          { 'autocmd filetype c          setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('html',       { 'autocmd filetype html       setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('lua',        { 'autocmd filetype lua        setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('yaml',       { 'autocmd filetype yaml       setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('typescript', { 'autocmd filetype typescript setlocal shiftwidth=2 tabstop=2 expandtab' })
 
-augroup('c',     { 'autocmd filetype c     setlocal shiftwidth=2 tabstop=2 expandtab' })
-augroup('html',  { 'autocmd filetype html  setlocal shiftwidth=2 tabstop=2 expandtab' })
-augroup('lua',   { 'autocmd filetype lua   setlocal shiftwidth=2 tabstop=2 expandtab' })
-augroup('yaml',  { 'autocmd filetype yaml  setlocal shiftwidth=2 tabstop=2 expandtab' })
-augroup('asd',   { 'autocmd BufRead,BufNewFile *.asd set filetype=lisp' })
-
+augroup('asd',        { 'autocmd BufRead,BufNewFile *.asd       set filetype=lisp' })
+augroup('coleslawrc', { 'autocmd BufRead,BufNewFile .coleslawrc set filetype=lisp' })
 
 --|
 --| KEYS
@@ -344,7 +330,6 @@ c 'nnoremap ; <nop>'
 
 g.mapleader = " "
 g.maplocalleader = ";"
-
 
 c 'inoremap jk <esc>'
 c 'nnoremap <silent> <leader>` :Sayonara!<cr>'
@@ -363,11 +348,11 @@ c 'nnoremap <F10> :TSHighlightCapturesUnderCursor<cr>'
 c [[nnoremap <silent> <leader>f :execute 'Files' v:lua.get_project_root()<cr>]]
 c [[nnoremap <silent> <leader>0 :execute 'Files' $HOME<cr>]]
 
+c [[nnoremap <silent> <leader>1 :execute 'Explore' v:lua.get_project_root()<cr>]]
 
 --|
 --| COLORSCHEME
 --|
-
 
 o.background = 'dark'
 
@@ -375,7 +360,6 @@ g.everforest_background = 'hard'
 g.everforest_disable_italic_comment = 1
 
 c 'colorscheme everforest'
-
 
 --|
 --| COLORS
@@ -385,11 +369,12 @@ c 'colorscheme everforest'
 
 c 'hi StatusLine   guibg=none'
 c 'hi StatusLineNC gui=none guibg=none guifg=#666666'
-c 'hi Visual       guibg=#424648'
+c 'hi Visual       guibg=#46484a'
 c 'hi EndOfBuffer  guifg=#2b3339'
 c 'hi TabLine      guifg=#859289 guibg=none'
 c 'hi TabLineFill  guifg=#d3c6aa guibg=none'
 c 'hi TabLineSel   guifg=#d3c6aa guibg=none'
+c 'hi PMenuSel     guifg=#dbbc7f guibg=#525658'
 
 -- COMMON LISP
 
@@ -401,22 +386,18 @@ c 'hi! link CL_CommaAt        Yellow'
 c 'hi! link CL_CommaAtParen   Yellow'
 c 'hi! link CL_CommaParen     Yellow'
 c 'hi! link CL_Comment        Comment'
-c 'hi! link CL_Function       Purple'
-c 'hi! link CL_KeywordColon   Green'
+c 'hi! link CL_KeywordColon   Aqua'
+c 'hi! link CL_PackageColon   Aqua'
 c 'hi! link CL_Paren          Comment'
 c 'hi! link CL_Quote          Blue'
 c 'hi! link CL_QuoteParen     Blue'
-c 'hi! link CL_VectorParen    Aqua'
+c 'hi! link CL_ReaderMacro    Green'
+c 'hi! link CL_VectorParen    Green'
 
 c 'hi CL_ParameterModifier gui=italic'
 
-c 'hi! CL_String      guifg=#b99f80'
-c 'hi! CL_StringQuote guifg=#b99f80'
+c 'hi! CL_String guifg=#b99f7c'
 
+c 'hi! link CL_StringQuote   CL_String'
 c 'hi! link Constant         CL_String'
 c 'hi! link vlime_replString CL_String'
-
-c 'hi CL_PackageColon guifg=#aaaaa0'
--- c 'hi CL_PackageColonContext guifg=#aaaaa0'
--- c 'hi! CL_StringQuote guifg=#b2a488'
-
