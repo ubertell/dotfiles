@@ -1,9 +1,12 @@
 [ -f $HOME/.bashrc ] && . $HOME/.bashrc
 
 # PATH
-paths=( $HOME/.mix/escripts \
+paths=( \
+	$HOME/bin \
 	$HOME/.fzf/bin \
-	$HOME/bin ) 
+    $HOME/.node_modules/bin \
+    $HOME/.roswell/bin \
+)
 
 for p in "${paths[@]}"; do
    PATH=$p:$PATH
@@ -23,6 +26,3 @@ export MOZ_ENABLE_WAYLAND=1
 # no history in general
 export HISTFILE=''
 export LESSHISTFILE=''
-
-# opam configuration
-test -r $HOME/.opam/opam-init/init.sh && . $HOME/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true

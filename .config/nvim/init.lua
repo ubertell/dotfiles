@@ -74,7 +74,7 @@ o.undodir = dirs["undo"]
 o.undofile = true
 
 -- show the sign column.
--- o.signcolumn = 'yes'
+o.signcolumn = 'yes'
 
 -- ignore case, unless upper-case.
 o.ignorecase = true
@@ -112,7 +112,7 @@ github_clone('wbthomason', 'packer.nvim', dirs['packages'] .. '/packer.nvim')
 require('packer').startup(function()
   use 'wbthomason/packer.nvim'
   use {
-    'airblade/vim-gitgutter',
+    -- 'airblade/vim-gitgutter',
     'junegunn/fzf.vim',
     'junegunn/gv.vim',
     'junegunn/vim-easy-align',
@@ -126,6 +126,16 @@ require('packer').startup(function()
     'tpope/vim-surround',
     'tpope/vim-unimpaired',
     'vlime/vlime',
+  }
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
+    config = function()
+      require('gitsigns').setup()
+    end,
+    tag = 'release'
   }
   use {
     'eraserhd/parinfer-rust', 
@@ -145,6 +155,8 @@ require('packer').startup(function()
     requires = {'nvim-treesitter/nvim-treesitter'}
   }
 end)
+
+require('gitsigns').setup()
 
 --|
 --| AUTOSAVE
@@ -216,11 +228,11 @@ g.peekaboo_window = 'enew'
 
 require('nvim-treesitter.configs').setup {
   ensure_installed = {
-    'lua', 'c', 'typescript'
+    'lua', 'c', 'typescript', 'javascript'
   },
   highlight = {
     enable = true,
-    disable = {'commonlisp'},
+    disable = {'commonlisp', 'erlang'},
     additional_vim_regex_highlighting = false,
   },
   indent = {
@@ -313,10 +325,12 @@ o.tabline="%!v:lua.tabLine()"
 --|
 
 augroup('c',          { 'autocmd filetype c          setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('css',        { 'autocmd filetype css        setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('html',       { 'autocmd filetype html       setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('lua',        { 'autocmd filetype lua        setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('yaml',       { 'autocmd filetype yaml       setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('typescript', { 'autocmd filetype typescript setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('javascript', { 'autocmd filetype javascript setlocal shiftwidth=2 tabstop=2 expandtab' })
 
 augroup('asd',        { 'autocmd BufRead,BufNewFile *.asd       set filetype=lisp' })
 augroup('coleslawrc', { 'autocmd BufRead,BufNewFile .coleslawrc set filetype=lisp' })
@@ -333,6 +347,7 @@ g.maplocalleader = ";"
 
 c 'inoremap jk <esc>'
 c 'nnoremap <silent> <leader>` :Sayonara!<cr>'
+c 'nnoremap <silent> <leader>m :make<cr>'
 c 'nnoremap <C-h> <C-w>h'
 c 'nnoremap <C-j> <C-w>j'
 c 'nnoremap <C-k> <C-w>k'
@@ -375,6 +390,11 @@ c 'hi TabLine      guifg=#859289 guibg=none'
 c 'hi TabLineFill  guifg=#d3c6aa guibg=none'
 c 'hi TabLineSel   guifg=#d3c6aa guibg=none'
 c 'hi PMenuSel     guifg=#dbbc7f guibg=#525658'
+c 'hi! link SignColumn Normal'
+
+c 'hi! BlueSign  guibg=none'
+c 'hi! GreenSign guibg=none'
+c 'hi! RedSign   guibg=none'
 
 -- COMMON LISP
 
@@ -401,3 +421,30 @@ c 'hi! CL_String guifg=#b99f7c'
 c 'hi! link CL_StringQuote   CL_String'
 c 'hi! link Constant         CL_String'
 c 'hi! link vlime_replString CL_String'
+
+-- ERLANG
+
+c 'hi! link Erl_Colon           Purple'
+c 'hi! link Erl_Comma           Normal'
+c 'hi! link Erl_CommaEnd        Normal'
+c 'hi! link Erl_Comment         Comment'
+c 'hi! link Erl_Dot             Red'
+c 'hi! link Erl_IgnoredVariable Comment'
+c 'hi! link Erl_Keyword         Red'
+c 'hi! link Erl_ParenD          Comment'
+c 'hi! link Erl_RightArrow      Green'
+c 'hi! link Erl_SemiColon       Blue'
+c 'hi! link Erl_Send            Red'
+c 'hi! link Erl_String          Aqua'
+c 'hi! link Erl_Type            Comment'
+
+c 'hi! Erl_TupleD  guifg=#b99f7c'
+c 'hi! Erl_ListD   guifg=#b99f7c'
+c 'hi! Erl_MapD    guifg=#b99f7c'
+c 'hi! Erl_Record  guifg=#b99f7c'
+c 'hi! Erl_Hash    guifg=#b99f7c'
+
+c 'hi! Erl_Attribute  gui=italic'
+c 'hi! Erl_Define     gui=italic'
+c 'hi! Erl_RecordDef  gui=italic'
+
