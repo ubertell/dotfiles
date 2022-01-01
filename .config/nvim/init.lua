@@ -1,7 +1,7 @@
 --# deps: (mkdir, ag, fzf, git, gcc, libstdc++, python 3)
 
 --|
---| HELPERS
+--| ALIASES
 --|
 
 api = vim.api
@@ -12,6 +12,25 @@ fn  = vim.fn
 g   = vim.g
 o   = vim.opt
 fmt = string.format
+
+--|
+--| DIRS
+--|
+
+dirs = {}
+
+dirs['data']      = (fn.stdpath 'data')
+dirs['packages']  = dirs['data'] .. '/site/pack/packer/start'
+dirs['undo']      = dirs['data'] .. '/undo'
+dirs['templates'] = (fn.stdpath 'config') .. '/templates'
+
+c ('silent! !mkdir -p ' .. dirs['undo'])
+c ('silent! !mkdir -p ' .. dirs['packages'])
+c ('silent! !mkdir -p ' .. dirs['templates'])
+
+--|
+--| HELPERS
+--|
 
 function augroup(name, commands)
   c ('augroup ' .. name)
@@ -46,19 +65,6 @@ function _G.show(...)
   print(table.concat(objects, '\n'))
   return ...
 end
-
---|
---| DIRS
---|
-
-dirs = {}
-
-dirs['data']     = (fn.stdpath 'data')
-dirs['packages'] = dirs['data'] .. '/site/pack/packer/start'
-dirs['undo']     = dirs['data'] .. '/undo'
-
-c ('silent! !mkdir -p ' .. dirs['undo'])
-c ('silent! !mkdir -p ' .. dirs['packages'])
 
 --|
 --| OPTIONS
@@ -331,16 +337,20 @@ augroup('lua',        { 'autocmd filetype lua        setlocal shiftwidth=2 tabst
 augroup('yaml',       { 'autocmd filetype yaml       setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('typescript', { 'autocmd filetype typescript setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('javascript', { 'autocmd filetype javascript setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('erlang',     { 'autocmd filetype erlang setlocal shiftwidth=2 tabstop=2 expandtab' })
 
-augroup('asd',        { 'autocmd BufRead,BufNewFile *.asd       set filetype=lisp' })
-augroup('coleslawrc', { 'autocmd BufRead,BufNewFile .coleslawrc set filetype=lisp' })
+augroup('asd',        { 'autocmd BufRead,BufNewFile *.asd set filetype=lisp' })
+augroup('erlang',     { 'autocmd BufRead,BufNewFile *.{app,app.src,rel,config} set filetype=erlang' })
 
 --|
 --| KEYS
 --|
 
-c 'nnoremap <localleader>; ;'
-c 'nnoremap ; <nop>'
+-- c 'nnoremap <localleader>; ;'
+-- c 'nnoremap ; <nop>'
+
+-- Pollen
+-- c 'digraph lo 9674'
 
 g.mapleader = " "
 g.maplocalleader = ";"
@@ -362,8 +372,14 @@ c 'nnoremap <F10> :TSHighlightCapturesUnderCursor<cr>'
 
 c [[nnoremap <silent> <leader>f :execute 'Files' v:lua.get_project_root()<cr>]]
 c [[nnoremap <silent> <leader>0 :execute 'Files' $HOME<cr>]]
-
 c [[nnoremap <silent> <leader>1 :execute 'Explore' v:lua.get_project_root()<cr>]]
+
+c ([[command! -nargs=1 ReadTemplate :.-1r]] .. dirs['templates'] .. [[/<args>]])
+c (
+  [[nnoremap <silent> <leader>t :call fzf#run({ 'source': 'find ]] .. 
+  dirs['templates'] .. 
+  [[ -type f -printf "%P\n"', 'sink': 'ReadTemplate'})<cr>]]
+)
 
 --|
 --| COLORSCHEME
@@ -382,21 +398,28 @@ c 'colorscheme everforest'
 
 -- VIM
 
-c 'hi StatusLine   guibg=none'
-c 'hi StatusLineNC gui=none guibg=none guifg=#666666'
-c 'hi Visual       guibg=#46484a'
 c 'hi EndOfBuffer  guifg=#2b3339'
+c 'hi PMenuSel     guifg=#dbbc7f guibg=#525658'
+c 'hi StatusLine   guibg=none'
+c 'hi StatusLineNC gui=none      guibg=none guifg=#666666'
 c 'hi TabLine      guifg=#859289 guibg=none'
 c 'hi TabLineFill  guifg=#d3c6aa guibg=none'
 c 'hi TabLineSel   guifg=#d3c6aa guibg=none'
-c 'hi PMenuSel     guifg=#dbbc7f guibg=#525658'
+c 'hi Visual       guibg=#46484a'
+
+c 'hi! link Constant   CL_String'
 c 'hi! link SignColumn Normal'
+
+-- COLORSCHEME
 
 c 'hi! BlueSign  guibg=none'
 c 'hi! GreenSign guibg=none'
 c 'hi! RedSign   guibg=none'
 
 -- COMMON LISP
+
+c 'hi! CL_ParameterModifier gui=italic'
+c 'hi! CL_String            guifg=#b99f7c'
 
 c 'hi! link CL_Backquote      Red'
 c 'hi! link CL_BackquoteParen Red'
@@ -412,39 +435,38 @@ c 'hi! link CL_Paren          Comment'
 c 'hi! link CL_Quote          Blue'
 c 'hi! link CL_QuoteParen     Blue'
 c 'hi! link CL_ReaderMacro    Green'
+c 'hi! link CL_StringQuote    CL_String'
 c 'hi! link CL_VectorParen    Green'
-
-c 'hi CL_ParameterModifier gui=italic'
-
-c 'hi! CL_String guifg=#b99f7c'
-
-c 'hi! link CL_StringQuote   CL_String'
-c 'hi! link Constant         CL_String'
-c 'hi! link vlime_replString CL_String'
+c 'hi! link vlime_replString  CL_String'
 
 -- ERLANG
 
-c 'hi! link Erl_Colon           Purple'
+c 'hi! link Erl_Colon           Orange'
 c 'hi! link Erl_Comma           Normal'
 c 'hi! link Erl_CommaEnd        Normal'
 c 'hi! link Erl_Comment         Comment'
-c 'hi! link Erl_Dot             Red'
 c 'hi! link Erl_IgnoredVariable Comment'
-c 'hi! link Erl_Keyword         Red'
-c 'hi! link Erl_ParenD          Comment'
+c 'hi! link Erl_ListD           Blue'
+c 'hi! link Erl_ParenD          Yellow'
 c 'hi! link Erl_RightArrow      Green'
-c 'hi! link Erl_SemiColon       Blue'
+c 'hi! link Erl_SemiColon       Purple'
 c 'hi! link Erl_Send            Red'
-c 'hi! link Erl_String          Aqua'
+c 'hi! link Erl_String          Normal'
+c 'hi! link Erl_StringModifier  Normal'
 c 'hi! link Erl_Type            Comment'
+c 'hi! link Erl_TupleD          Red'
 
-c 'hi! Erl_TupleD  guifg=#b99f7c'
-c 'hi! Erl_ListD   guifg=#b99f7c'
-c 'hi! Erl_MapD    guifg=#b99f7c'
-c 'hi! Erl_Record  guifg=#b99f7c'
-c 'hi! Erl_Hash    guifg=#b99f7c'
+c 'hi! Erl_String guifg=#b99f7c'
+
+c 'hi! Erl_Dot gui=bold,italic'
+
+-- c 'hi! Erl_FatRightArrow guifg=#b99f7c'
+-- c 'hi! Erl_Hash          guifg=#b99f7c'
+-- c 'hi! Erl_MapD          guifg=#b99f7c'
+c 'hi! link Erl_Record Yellow'
+
+c 'hi Erl_Keyword gui=underline'
 
 c 'hi! Erl_Attribute  gui=italic'
 c 'hi! Erl_Define     gui=italic'
 c 'hi! Erl_RecordDef  gui=italic'
-
