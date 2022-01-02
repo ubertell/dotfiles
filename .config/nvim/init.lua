@@ -109,6 +109,8 @@ o.expandtab = true
 -- Command line height
 o.cmdheight = 1
 
+o.colorcolumn = "80"
+
 --|
 --| PACKER
 --|
@@ -374,7 +376,7 @@ c [[nnoremap <silent> <leader>f :execute 'Files' v:lua.get_project_root()<cr>]]
 c [[nnoremap <silent> <leader>0 :execute 'Files' $HOME<cr>]]
 c [[nnoremap <silent> <leader>1 :execute 'Explore' v:lua.get_project_root()<cr>]]
 
-c ([[command! -nargs=1 ReadTemplate :.-1r]] .. dirs['templates'] .. [[/<args>]])
+c ([[command! -nargs=1 ReadTemplate :silent .-1r]] .. dirs['templates'] .. [[/<args>]])
 c (
   [[nnoremap <silent> <leader>t :call fzf#run({ 'source': 'find ]] .. 
   dirs['templates'] .. 
@@ -450,13 +452,13 @@ c 'hi! link Erl_ListD           Blue'
 c 'hi! link Erl_ParenD          Yellow'
 c 'hi! link Erl_RightArrow      Green'
 c 'hi! link Erl_SemiColon       Purple'
-c 'hi! link Erl_Send            Red'
-c 'hi! link Erl_String          Normal'
-c 'hi! link Erl_StringModifier  Normal'
+c 'hi! link Erl_Send            Normal'
+c 'hi! link Erl_Equal           Normal'
 c 'hi! link Erl_Type            Comment'
 c 'hi! link Erl_TupleD          Red'
 
 c 'hi! Erl_String guifg=#b99f7c'
+c 'hi! Erl_StringModifier guifg=#b99f7c gui=bold'
 
 c 'hi! Erl_Dot gui=bold,italic'
 
