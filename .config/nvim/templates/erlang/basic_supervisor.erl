@@ -1,48 +1,47 @@
-%%%-----------------------------------------------------------------------------
-% ┌┐ ┌─┐┌─┐┬┌─┐    ┌─┐┬ ┬┌─┐┌─┐┬─┐┬  ┬┬┌─┐┌─┐┬─┐
-% ├┴┐├─┤└─┐││      └─┐│ │├─┘├┤ ├┬┘└┐┌┘│└─┐│ │├┬┘
-% └─┘┴ ┴└─┘┴└─┘────└─┘└─┘┴  └─┘┴└─ └┘ ┴└─┘└─┘┴└─
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% ┌┐ ┌─┐┌─┐┬┌─┐   ┌─┐┬ ┬┌─┐┌─┐┬─┐┬  ┬┬┌─┐┌─┐┬─┐
+% ├┴┐├─┤└─┐││     └─┐│ │├─┘├┤ ├┬┘└┐┌┘│└─┐│ │├┬┘
+% └─┘┴ ┴└─┘┴└─┘   └─┘└─┘┴  └─┘┴└─ └┘ ┴└─┘└─┘┴└─
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % @author    <author>
 % @copyright <copyright>
-% @version   <version>
 % @reference See <URL> for more information.
-% @since     <since>
 % @see       supervisor
-% @doc
-% Basic example of a module with the supervisor behaviour.
-% @end
-%%%-----------------------------------------------------------------------------
-
+% @since     <since>
+% @version   <version>
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -module(basic_supervisor).
 -behaviour(supervisor).
 
-%%------------------------------------------------------------------------------
-% MACRO DEFS.
-%%------------------------------------------------------------------------------
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Includes
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-include_lib("eunit/include/eunit.hrl").
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Macros 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -define(SERVER, ?MODULE).
 
-%%------------------------------------------------------------------------------
-% PUBLIC API 
-%%------------------------------------------------------------------------------
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Module API
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -export([start_link/0]).
 
-%%------------------------------------------------------------------------------
-% SUPERVISOR CALLBACKS
-%%------------------------------------------------------------------------------
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Supervisor callbacks
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -export([init/1]).
 
-%%------------------------------------------------------------------------------
-% PUBLIC API IMPL.
-%%------------------------------------------------------------------------------
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Module API
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %-------------------------------------------------------------------------------
 % start_link/0
-%
+%-------------------------------------------------------------------------------
 % @doc
-% Create a supervisor process using this module.
+% Create a supervisor process using this module as the callback module.
 % @end
 %-------------------------------------------------------------------------------
 -spec start_link() -> {ok, Pid :: pid()} | 
@@ -50,44 +49,28 @@
                       {error, {alread_started, Pid :: pid()}} |
                       {error, {shutdown, Reason :: term()}} |
                       {error, Reason :: term()}.
+%-------------------------------------------------------------------------------
 start_link() ->
     supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
-%%------------------------------------------------------------------------------
-% SUPERVISOR CALLBACKS IMPL.
-%%------------------------------------------------------------------------------
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Supevisor callbacks
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %-------------------------------------------------------------------------------
 % init/1
-%
+%-------------------------------------------------------------------------------
 % @doc
 % Whenever a supervisor is started using start_link/2,3, this function is called
 % by the new process to find out about restart strategy, maximum restart 
 % intensity, and child specifications.
 %
-% Args is the Args argument provided to the start function.
-%
-% init/1 is to return one of:
-%
-%  {ok, {SupFlags, [ChildSpec]}}
-%  ignore
-%
-% SupFlags is the supervisor flags defining the restart strategy and maximum 
-% restart intensity for the supervisor. 
-%
-% [ChildSpec] is a list of valid child specifications defining which child 
-% processes the supervisor must start and monitor. 
-%
-% NOTE: When the restart strategy is simple_one_for_one, the list of child 
-% specifications must be a list with one child specification only. 
-% (The child specification identifier is ignored.) 
-% No child process is then started during the initialization phase, but all 
-% children are assumed to be started dynamically using start_child/2.
-%
 % NOTE: init/1 must have NO side effects.
 % @end
 %-------------------------------------------------------------------------------
-
+-spec init(term()) -> {ok, {supervisor:sup_flags(), [supervisor:child_spec()]}} |
+                      ignore.
+%-------------------------------------------------------------------------------
 init(_Args) ->
     SupFlags = #{% 'strategy' sets what to do if a child process terminates.
                  % Value is one of
@@ -147,3 +130,7 @@ init(_Args) ->
              }
     ChildSpecs = [Child],
     {ok, {SupFlags, ChildSpecs}}.
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Internal
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
