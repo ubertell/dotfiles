@@ -339,20 +339,16 @@ augroup('lua',        { 'autocmd filetype lua        setlocal shiftwidth=2 tabst
 augroup('yaml',       { 'autocmd filetype yaml       setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('typescript', { 'autocmd filetype typescript setlocal shiftwidth=2 tabstop=2 expandtab' })
 augroup('javascript', { 'autocmd filetype javascript setlocal shiftwidth=2 tabstop=2 expandtab' })
-augroup('erlang',     { 'autocmd filetype erlang setlocal shiftwidth=2 tabstop=2 expandtab' })
 
-augroup('asd',        { 'autocmd BufRead,BufNewFile *.asd set filetype=lisp' })
-augroup('erlang',     { 'autocmd BufRead,BufNewFile *.{app,app.src,rel,config} set filetype=erlang' })
+-- augroup('asd',        { 'autocmd BufRead,BufNewFile *.asd set filetype=lisp' })
+
+augroup('erlang',     { 'autocmd filetype erlang setlocal shiftwidth=2 tabstop=2 expandtab' })
+augroup('erlang2',    { 'autocmd BufRead,BufNewFile *.{app,app.src,rel,config} set filetype=erlang' })
+
 
 --|
 --| KEYS
 --|
-
--- c 'nnoremap <localleader>; ;'
--- c 'nnoremap ; <nop>'
-
--- Pollen
--- c 'digraph lo 9674'
 
 g.mapleader = " "
 g.maplocalleader = ";"
@@ -395,7 +391,7 @@ g.everforest_disable_italic_comment = 1
 c 'colorscheme everforest'
 
 --|
---| COLORS
+--| EXTRA COLORS
 --|
 
 -- VIM
@@ -447,28 +443,18 @@ c 'hi! link Erl_Colon           Orange'
 c 'hi! link Erl_Comma           Normal'
 c 'hi! link Erl_CommaEnd        Normal'
 c 'hi! link Erl_Comment         Comment'
+c 'hi! link Erl_Equal           Normal'
+c 'hi! link Erl_FatRightArrow   Orange'
 c 'hi! link Erl_IgnoredVariable Comment'
 c 'hi! link Erl_ListD           Blue'
+c 'hi! link Erl_MapD            Orange'
 c 'hi! link Erl_ParenD          Yellow'
+c 'hi! link Erl_Record          Yellow'
 c 'hi! link Erl_RightArrow      Green'
 c 'hi! link Erl_SemiColon       Purple'
 c 'hi! link Erl_Send            Normal'
-c 'hi! link Erl_Equal           Normal'
-c 'hi! link Erl_Type            Comment'
 c 'hi! link Erl_TupleD          Red'
 
-c 'hi! Erl_String guifg=#b99f7c'
+c 'hi! Erl_String         guifg=#b99f7c' -- brown
 c 'hi! Erl_StringModifier guifg=#b99f7c gui=bold'
-
-c 'hi! Erl_Dot gui=bold,italic'
-
--- c 'hi! Erl_FatRightArrow guifg=#b99f7c'
--- c 'hi! Erl_Hash          guifg=#b99f7c'
--- c 'hi! Erl_MapD          guifg=#b99f7c'
-c 'hi! link Erl_Record Yellow'
-
-c 'hi Erl_Keyword gui=underline'
-
-c 'hi! Erl_Attribute  gui=italic'
-c 'hi! Erl_Define     gui=italic'
-c 'hi! Erl_RecordDef  gui=italic'
+c 'hi  Erl_Keyword        gui=underline'
