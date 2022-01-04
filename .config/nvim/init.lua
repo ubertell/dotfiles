@@ -22,11 +22,10 @@ dirs = {}
 dirs['data']      = (fn.stdpath 'data')
 dirs['packages']  = dirs['data'] .. '/site/pack/packer/start'
 dirs['undo']      = dirs['data'] .. '/undo'
-dirs['templates'] = (fn.stdpath 'config') .. '/templates'
+dirs['templates'] = os.getenv('HOME') .. '/repo/templates'
 
 c ('silent! !mkdir -p ' .. dirs['undo'])
 c ('silent! !mkdir -p ' .. dirs['packages'])
-c ('silent! !mkdir -p ' .. dirs['templates'])
 
 --|
 --| HELPERS
@@ -376,7 +375,7 @@ c ([[command! -nargs=1 ReadTemplate :silent .-1r]] .. dirs['templates'] .. [[/<a
 c (
   [[nnoremap <silent> <leader>t :call fzf#run({ 'source': 'find ]] .. 
   dirs['templates'] .. 
-  [[ -type f -printf "%P\n"', 'sink': 'ReadTemplate'})<cr>]]
+  [[ -type f -not -path "*/.git/*" -mindepth 2 -printf "%P\n"', 'sink': 'ReadTemplate'})<cr>]]
 )
 
 --|
