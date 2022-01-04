@@ -1,7 +1,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% ┌┐ ┌─┐┌─┐┬┌─┐   ┌─┐┬ ┬┌─┐┌─┐┬─┐┬  ┬┬┌─┐┌─┐┬─┐
-% ├┴┐├─┤└─┐││     └─┐│ │├─┘├┤ ├┬┘└┐┌┘│└─┐│ │├┬┘
-% └─┘┴ ┴└─┘┴└─┘   └─┘└─┘┴  └─┘┴└─ └┘ ┴└─┘└─┘┴└─
+% ┌─┐┬ ┬┌─┐┌─┐┬─┐┬  ┬┬┌─┐┌─┐┬─┐
+% └─┐│ │├─┘├┤ ├┬┘└┐┌┘│└─┐│ │├┬┘
+% └─┘└─┘┴  └─┘┴└─ └┘ ┴└─┘└─┘┴└─
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % @author    <author>
 % @copyright <copyright>
@@ -10,7 +10,7 @@
 % @since     <since>
 % @version   <version>
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--module(basic_supervisor).
+-module(?SUPERVISOR).
 -behaviour(supervisor).
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,11 +93,11 @@ init(_Args) ->
                 },
     Child = #{% 'id' is used to identify the child specification by the 
               % supervior (mandatory).
-              id => basic_gen_server, 
+              id => ?CHILD_MODULE, 
 
               % 'start': the function call used to start the child 
               % process. It is a module-function-arguments tuple.
-              start => {basic_gen_server, start_link, []}, 
+              start => {?CHILD_MODULE, start_link, []}, 
 
               % 'restart': when a terminated child process is to be restarted. 
               % Values is one of:
@@ -126,7 +126,7 @@ init(_Args) ->
               % 'dynamic'.
               %
               % This information is used by the release handler during upgrades.
-              modules => [basic_gen_server]
+              modules => [?CHILD_MODULE]
              }
     ChildSpecs = [Child],
     {ok, {SupFlags, ChildSpecs}}.
