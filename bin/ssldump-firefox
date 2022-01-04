@@ -1,0 +1,2 @@
+#!/bin/env bash
+SSLKEYLOGFILE="$HOME/log/firefox/ssl_key_log_file" $HOME/opt/firefox/firefox 2>&1 > "$HOME/log/firefox.log"
