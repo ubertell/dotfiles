@@ -7,7 +7,7 @@ syn case      ignore
 
 syn iskeyword 38,42,43,45,47-58,60-62,64-90,97-122,_
 
-syn match CL_ReaderMacro "#."
+syn match CL_ReaderMacro /\(#'\|#\.\|#\)/
 
 syn match  CL_Backquote   "`"
 syn match  CL_Comma       ","
@@ -19,7 +19,8 @@ syn match  CL_KeywordColon ":" contained
 syn match  CL_KeywordColonContext "\H:" contains=CL_KeywordColon
 syn match  CL_ParameterModifier /\(&key\|&body\|&rest\|&optional\)/
 syn match  CL_Define /\(defclass\|defgeneric\|defmethod\|defun\|defvar\|defparameter\|defstruct\)/
-syn match  CL_Scope /\(lambda\|let\|let*\|flet\|labels\)/
+syn match  CL_Scope  /\(lambda\|let\|let*\|flet\|labels\)/
+syn match  CL_Branch /\(if\|cond\|case\)/
 syn region CL_List          matchgroup=CL_Paren          start=/(/   end=/)/ contains=ALL
 syn region CL_QuoteList     matchgroup=CL_QuoteParen     start=/'(/  end=/)/ contains=ALL
 syn region CL_BackquoteList matchgroup=CL_BackquoteParen start=/`(/  end=/)/ contains=ALL

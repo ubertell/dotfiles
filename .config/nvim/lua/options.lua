@@ -1,0 +1,19 @@
+o = vim.opt
+
+o.cmdheight     = 1
+o.colorcolumn   = "80"
+o.expandtab     = true
+o.ignorecase    = true
+o.mouse         = 'a'
+o.shiftwidth    = 4
+o.shortmess     = "filnxtToOFI"
+o.showcmd       = false
+o.showmode      = false
+o.signcolumn    = 'yes'
+o.smartcase     = true
+o.swapfile      = false
+o.tabstop       = 4
+o.termguicolors = true
+o.undodir       = vim.fn.stdpath('data') .. '/undo'
+o.undofile      = true
+o.updatetime    = 200

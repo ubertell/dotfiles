@@ -1,0 +1,38 @@
+#!/bin/env sh
+
+print_help() {
+    echo "Usage: db ACTION"
+    echo "ACTIONS:"
+    echo " start    start db."
+    echo " stop     stop db."
+    echo " status   show db status."
+    echo " version  show db version."
+    echo " connect  connect to db."
+}
+
+if [ $# -lt 1 ]; then
+    print_help
+    exit 0
+fi
+        
+case "$1" in
+    start)
+        pg_ctl -D $PGDATA -l $PGDATA/logfile start
+        ;;
+    stop)
+        pg_ctl -D $PGDATA stop
+        ;;
+    status)
+        pg_ctl -D $PGDATA status
+        ;;
+    version)
+        pg_ctl --version | awk '{$1=""}1'
+        ;;
+    connect)
+        psql
+        ;;
+    *)
+        echo "Unknown option: $*"
+        print_help
+        ;;
+esac
