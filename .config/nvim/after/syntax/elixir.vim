@@ -8,11 +8,6 @@ syn keyword elixirRequire require
 syn keyword elixirUnQuote unquote unquote_splicing
 syn keyword elixirUse     use
 
-syn match elixirKeyword '\(\.\)\@<!\<\(for\|case\|when\|with\|cond\|if\|unless\|try\|receive\|after\|raise\|rescue\|catch\|else\|quote\|unquote\|super\|unquote_splicing\)\>:\@!'
-
-syn keyword elixirInclude import require alias use
-
-
 syn keyword elixirPseudoVariable __FILE__ __DIR__ __MODULE__ __ENV__ 
 syn keyword elixirPseudoVariable __CALLER__ __STACKTRACE__
 
@@ -22,21 +17,28 @@ syn match elixirAmpersand     "&"
 syn match elixirBar           "\s|\s"
 syn match elixirColon         ":"
 syn match elixirDot           '\.'
-syn match elixirEqual         "="
+syn match elixirRightArrow    '->'
+syn match elixirLeftArrow     '<-'
+syn match elixirDefaultValue  '\\'
+syn match elixirParens        '('
+syn match elixirParens        ')'
 syn match elixirFatRightArrow "=>"
-syn match elixirProcent       "%"
 
-syn match elixirUnusedVariable  '\%(\.\)\@<!\<_\w*\>\%((\)\@!'
+" syn match elixirAtomAlias '\([a-z]\)\@<![A-Z]\w*\%(\.[A-Z]\w*\)*' contains=elixirDot
+
 syn match elixirModuleAttribute '@[a-zA-Z][a-zA-Z_]*'
 
-syn region elixirArguments  matchgroup=elixirArgumentsDelimiter  start='(' end=')' contains=ALL
-syn region elixirTuple matchgroup=elixirTupleDelimiter start="{"  end="}"  contains=ALL
-syn region elixirList  matchgroup=elixirListDelimiter  start='\[' end='\]' contains=ALL
-syn region elixirMap   matchgroup=elixirMapDelimiter   start="%{" end="}"  contains=ALL
+syn match elixirUnusedVariable  '\%(\.\)\@<!\<_\w*\>\%((\)\@!'
 
+syn region elixirTuple matchgroup=elixirTupleDelimiter start="\(\w\|#\)\@<!{" end="}" contains=ALL
+syn region elixirMap matchgroup=elixirMapDelimiter start="%{" end="}" contains=ALL
+syn match elixirListDelimiter '\[' contained containedin=elixirList
+syn region elixirList matchgroup=elixirListDelimiter start='\[' end='\]' contains=ALL
 syn match elixirDelimEscape "\\[(<{\[)>}\]/\"'|]" transparent display contained contains=NONE
+syn match elixirStructDelimiter '{' contained containedin=elixirStruct
+syn region elixirStruct matchgroup=elixirStructDelimiter start="%\([a-zA-Z\.]\+{\)\@=" end="}" contains=ALLBUT,@elixirNotTop fold
 
-syn cluster elixirStringContained contains=elixirInterpolation,elixirRegexEscape,elixirRegexCharClass
+syn cluster elixirStringContained contains=elixirInterpolation,elixirRegexEscapd,elixirRegexCharClass
 syn region  elixirString          matchgroup=elixirStringDelimiter        start=+\z("\)+   end=+\z1+     skip=+\\\\\|\\\z1+ contains=@elixirStringContained
 syn region  elixirString          matchgroup=elixirStringDelimiter        start=+\z('''\)+ end=+^\s*\z1+ contains=@elixirStringContained
 syn region  elixirString          matchgroup=elixirStringDelimiter        start=+\z("""\)+ end=+^\s*\z1+ contains=@elixirStringContained
@@ -53,6 +55,7 @@ syn region elixirSigil matchgroup=elixirSigilDelimiter start="\~\u{"            
 syn region elixirSigil matchgroup=elixirSigilDelimiter start="\~\u<"                end=">"   skip="\\\\\|\\>"   contains=elixirDelimEscape fold
 syn region elixirSigil matchgroup=elixirSigilDelimiter start="\~\u\["               end="\]"  skip="\\\\\|\\\]"  contains=elixirDelimEscape fold
 syn region elixirSigil matchgroup=elixirSigilDelimiter start="\~\u("                end=")"   skip="\\\\\|\\)"   contains=elixirDelimEscape fold
+
 syn region elixirSigil matchgroup=elixirSigilDelimiter start="\~\l\z(/\|\"\|'\||\)" end="\z1" skip="\\\\\|\\\z1"                                                              fold
 syn region elixirSigil matchgroup=elixirSigilDelimiter start="\~\l{"                end="}"   skip="\\\\\|\\}"   contains=@elixirStringContained,elixirRegexEscapePunctuation fold
 syn region elixirSigil matchgroup=elixirSigilDelimiter start="\~\l<"                end=">"   skip="\\\\\|\\>"   contains=@elixirStringContained,elixirRegexEscapePunctuation fold
