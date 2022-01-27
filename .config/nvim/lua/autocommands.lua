@@ -4,6 +4,11 @@ augroup('elixir', {
     'filetype elixir setlocal shiftwidth=2 tabstop=2 expandtab'
 })
 
+augroup('heex', { 
+    'BufRead,BufNewFile *.heex set filetype=heex',
+    'filetype heex setlocal shiftwidth=2 tabstop=2 expandtab'
+})
+
 augroup('erlang', {
     'filetype erlang setlocal shiftwidth=4 tabstop=4 expandtab', 
     'BufRead,BufNewFile *.{app,app.src,rel,config} set filetype=erlang' 
