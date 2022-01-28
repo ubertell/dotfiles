@@ -6,6 +6,8 @@ paths=( \
 	$HOME/.fzf/bin \
     $HOME/.node_modules/bin \
     $HOME/.roswell/bin \
+    $HOME/opt/lfe/bin \
+    /usr/lib/psql14/bin \
 )
 
 for p in "${paths[@]}"; do
@@ -13,6 +15,8 @@ for p in "${paths[@]}"; do
 done
 
 export PATH
+
+export PGDATA=$HOME/database
 
 # EDITOR
 export EDITOR='nvim'

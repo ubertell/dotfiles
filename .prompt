@@ -20,7 +20,8 @@ git_prompt() {
   fi
 }
 
+export git_prompt
+
 export PS1="\[$R\w\] \[$GR\]$(git_prompt)\n\[$G|\] \[$RE\]"
 
 export PROMPT_COMMAND='echo && export PS1="\[$R\w\] \[$GR\]$(git_prompt)\n\[$G|\] \[$RE\]"'
-
