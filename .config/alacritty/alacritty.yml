@@ -1,5 +1,6 @@
 window:
   decorations: none
+  opacity: 0.97
 
   dynamic_padding: true
 
@@ -20,17 +21,17 @@ scrolling:
   multiplier: 4
 
 font:
-  size: 19.0
+  size: 21.0
 
   normal:
     family: JetBrains Mono
-    style: Regular
+    style: Regular 
 
   bold:
-    style: Medium
+    style: Bold
 
   bold_italic:
-    style: Medium
+    style: Bold Italic
 
   offset:
     x: 0
@@ -38,7 +39,6 @@ font:
 
 draw_bold_text_with_bright_colors: false
 
-background_opacity: 0.97
 
 selection:
   save_to_clipboard: true
