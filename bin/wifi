@@ -7,7 +7,6 @@ print_help() {
     echo " scan                 scan for and list networks."
     echo " up SSID              connect to a network."
     echo " down                 disconnect from a network."
-    echo " status               show wifi status."
 }
 
 if [ $# -lt 1 ]; then

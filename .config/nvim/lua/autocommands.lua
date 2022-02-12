@@ -1,12 +1,12 @@
 require('helpers/augroup')
 
 augroup('elixir', {
-    'filetype elixir setlocal shiftwidth=2 tabstop=2 expandtab'
+    'filetype elixir setlocal shiftwidth=2 tabstop=2 expandtab commentstring=#\\ %s',
 })
 
 augroup('heex', { 
-    'BufRead,BufNewFile *.heex set filetype=heex',
-    'filetype heex setlocal shiftwidth=2 tabstop=2 expandtab'
+    'BufRead,BufNewFile *.heex set filetype=eelixir',
+    'filetype eelixir setlocal shiftwidth=2 tabstop=2 expandtab'
 })
 
 augroup('erlang', {

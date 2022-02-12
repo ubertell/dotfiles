@@ -11,12 +11,16 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
-syn match elixirColon         ":"
-syn match elixirDot           '\.'
-syn match elixirParens        '('
-syn match elixirParens        ')'
-syn match elixirFatRightArrow '=>'
-syn match elixirAmp '&'
+syn match elixirEq             '='
+syn match elixir2Eq            '=='
+syn match elixirColon          ":"
+syn match elixirDoubleColon    "::"
+syn match elixirDot            '\.'
+syn match elixirParens         '('
+syn match elixirParens         ')'
+syn match elixirFatRightArrow  '=>'
+syn match elixirThinRightArrow '->'
+syn match elixirThinLeftArrow  '<-'
 
 syn cluster elixirNotTop contains=@elixirRegexSpecial,@elixirStringContained,@elixirDeclaration,elixirTodo,elixirArguments,elixirBlockDefinition,elixirUnusedVariable,elixirStructDelimiter,elixirListDelimiter
 syn cluster elixirRegexSpecial contains=elixirRegexEscape,elixirRegexCharClass,elixirRegexQuantifier,elixirRegexEscapePunctuation
@@ -28,7 +32,7 @@ syn keyword elixirTodo FIXME NOTE TODO OPTIMIZE XXX HACK contained
 
 syn match elixirId '\<[_a-zA-Z]\w*[!?]\?\>' contains=elixirUnusedVariable
 
-syn match elixirKeyword '\(\.\)\@<!\<\(for\|case\|when\|with\|cond\|if\|unless\|try\|receive\|after\|raise\|rescue\|catch\|else\|super\)\>:\@!'
+syn match elixirKeyword '\(\.\)\@<!\<\(for\|case\|when\|with\|cond\|if\|unless\|try\|receive\|after\|raise\|rescue\|catch\|else\|super\|not\|in\)\>:\@!'
 
 syn match elixirQuote '\(\.\)\@<!\<\(quote\)\>:\@!'
 syn match elixirUnQuote '\(\.\)\@<!\<\(unquote\|unquote_splicing\)\>:\@!'
@@ -38,9 +42,10 @@ syn keyword elixirLangRequire require
 syn keyword elixirLangAlias alias
 syn keyword elixirLangUse use
 
-syn match elixirUnusedVariable contained '\%(\.\)\@<!\<_\w*\>\%((\)\@!'
-
 syn match   elixirAlias '\([a-z]\)\@<![A-Z]\w*\%(\.[A-Z]\w*\)*' contains=elixirDot
+
+syn match elixirUnusedVariable contained '\%(\.\)\@<!\<_\w*\>\%((\)\@!'
+syn match elixirUnderscoreVariable contained '\%(\.\)\@<!\<__\w*\>\%((\)\@!'
 
 syn keyword elixirBoolean true false nil
 
@@ -65,9 +70,10 @@ syn region elixirRegex matchgroup=elixirRegexDelimiter start="%r/" end="/[uiomxf
 syn region elixirTuple matchgroup=elixirTupleDelimiter start="\(\w\|#\)\@<!{" end="}" contains=ALLBUT,@elixirNotTop fold
 
 syn match elixirListDelimiter '\[' contained containedin=elixirList
-syn region elixirList matchgroup=elixirListDelimiter start='\[' end='\]' contains=ALLBUT,@elixirNotTop fold
+syn region elixirList matchgroup=elixirListDelimiter start='\W\[' end='\]' contains=ALLBUT,@elixirNotTop fold
 
 syn region elixirMap matchgroup=elixirMapDelimiter start="%{" end="}" contains=ALLBUT,@elixirNotTop fold
+
 
 syn match elixirStructDelimiter '{' contained containedin=elixirStruct
 syn region elixirStruct matchgroup=elixirStructDelimiter start="%\([a-zA-Z_\.]\+{\)\@=" end="}" contains=ALLBUT,@elixirNotTop fold
@@ -81,8 +87,8 @@ syn region elixirInterpolation matchgroup=elixirInterpolationDelimiter start="#{
 syn match elixirAtomInterpolated   ':\("\)\@=' contains=elixirString
 syn match elixirString             "\(\w\)\@<!?\%(\\\(x\d{1,2}\|\h{1,2}\h\@!\>\|0[0-7]{0,2}[0-7]\@!\>\|[^x0MC]\)\|(\\[MC]-)+\w\|[^\s\\]\)"
 
-syn match elixirAtomString '"[a-zA-Z\._]\+":' contains=elixirColon 
-syn match elixirAtomString ':"[a-zA-Z\._]\+"' contains=elixirColon 
+syn match elixirAtomString '"[a-zA-Z\._]\+":'  contains=elixirColon 
+syn match elixirAtomString ':"[a-zA-Z\._]\+"'  contains=elixirColon 
 
 syn region elixirBlock              matchgroup=elixirBlockDefinition start="\<do\>:\@!" end="\<end\>" contains=ALLBUT,@elixirNotTop fold
 syn region elixirAnonymousFunction  matchgroup=elixirBlockDefinition start="\<fn\>"     end="\<end\>" contains=ALLBUT,@elixirNotTop fold
@@ -177,6 +183,10 @@ syn match  elixirCallbackDeclaration        "[^[:space:];#<,()\[\]]\+" contained
 syn match  elixirExUnitMacro "\C\(^\s*\)\@<=\<\(test\|describe\|setup\|setup_all\|on_exit\|doctest\)\>"
 syn match  elixirExUnitAssert "\C\(^\s*\)\@<=\<\(assert\|assert_in_delta\|assert_raise\|assert_receive\|assert_received\|catch_error\)\>"
 syn match  elixirExUnitAssert "\C\(^\s*\)\@<=\<\(catch_exit\|catch_throw\|flunk\|refute\|refute_in_delta\|refute_receive\|refute_received\)\>"
+
+syn match elixirAmp           '&'
+syn match elixirAmp           '&\d'
+syn match elixirDoubleAmp     '&&'
 
 " syncing starts 2000 lines before top line so docstrings don't screw things up
 syn sync minlines=2000

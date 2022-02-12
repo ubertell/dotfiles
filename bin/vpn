@@ -7,6 +7,7 @@ print_help() {
     echo " down                      disconnect from a vpn."
     echo " reset [continent/country] disconnect then reconnect."
     echo " ip                        query ipinfo.io."
+    echo " clean                     remove all wireguard .conf files."
 }
 
 if [ $# -lt 1 ]; then
@@ -65,9 +66,11 @@ case "$1" in
     ip)
         curl ipinfo.io
         ;;
+    clean)
+        sudo rm /etc/wireguard/*.conf
+        ;;
     *)
         echo "Unknown option: $*"
-        echo
         print_help
         ;;
 esac

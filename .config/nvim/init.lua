@@ -12,6 +12,7 @@ require('gitsigns_config')
 require('lsp_config')
 require('netrw_config')
 require('peekaboo_config')
+require('tree')
 require('colors')
 
 -- require('treesitter_config')

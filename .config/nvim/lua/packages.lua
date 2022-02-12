@@ -51,13 +51,20 @@ require('packer').startup(function()
   }
 
   use {
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate'
+      'kyazdani42/nvim-tree.lua',
+      requires = {
+        'kyazdani42/nvim-web-devicons', -- optional, for file icon
+      },
+      config = function() require'nvim-tree'.setup {} end
   }
+  -- use {
+  --   'nvim-treesitter/nvim-treesitter',
+  --   run = ':TSUpdate'
+  -- }
 
- use {
-    'nvim-treesitter/playground',
-    run = ':TSInstall query',
-    requires = {'nvim-treesitter/nvim-treesitter'}
-  }
+ -- use {
+ --    'nvim-treesitter/playground',
+ --    run = ':TSInstall query',
+ --    requires = {'nvim-treesitter/nvim-treesitter'}
+ --  }
 end)

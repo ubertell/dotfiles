@@ -1,7 +1,7 @@
 o = vim.opt
 
 o.cmdheight     = 1
-o.colorcolumn   = "80"
+-- o.colorcolumn   = "80"
 o.expandtab     = true
 o.ignorecase    = true
 o.mouse         = 'a'

@@ -19,6 +19,12 @@ case "$1" in
     start)
         pg_ctl -D $PGDATA -l $PGDATA/logfile start
         ;;
+    up)
+        pg_ctl -D $PGDATA -l $PGDATA/logfile start
+        ;;
+    down)
+        pg_ctl -D $PGDATA stop
+        ;;
     stop)
         pg_ctl -D $PGDATA stop
         ;;

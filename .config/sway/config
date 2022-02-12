@@ -9,15 +9,20 @@ set $cyan    #83c092
 set $white   #d3c6aa
 set $black0  #000000
 set $black1  #231f20
+set $black2  #2b3339
+set $gray    #505050
+set $gray1   #859289
 
 # Borders               title     title-bg title-text new-indi childborder
-client.focused          $white    $white   $black0    $white   $red
-client.focused_inactive $black0   $black   $white     $white   $black
-client.unfocused        $black0   $black1  $white     $white   $black
-client.urgent           $white    $white   $red       $white   $black
+client.focused          $gray1    $black2  $white     $black2 $gray1
+client.focused_inactive $black2   $black2  $white     $gray   $black2
+client.unfocused        $black2   $black1  $white     $gray   $black2
+client.urgent           $white    $white   $red       $gray   $black2
 
 # Layout
-default_border pixel 2
+default_border pixel 1
+titlebar_border_thickness 1
+titlebar_padding 3
 hide_edge_borders --i3 smart
 
 # Hide mouse-pointer after 1 s
@@ -50,7 +55,7 @@ bindsym $mod+Shift+e exit
 
 bindsym $mod+w kill
 
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec kitty
 
 for_window [app_id="^menu$"] floating enable,border pixel 4,resize set 900 700
 

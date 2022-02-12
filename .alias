@@ -1,16 +1,6 @@
 alias la='exa -F -a -s=type'
 alias ll='exa -F -l -a -s=type'
 alias ls='exa -F -s=type'
-
 alias tree='tree -F'
-
-alias g='git'
-
-alias repl='rlwrap ocaml'
-
-alias rebar='rebar3'
-
 alias vi='nvim'
 alias vim='nvim'
-
-# alias sway='sway --my-next-gpu-wont-be-nvidia'

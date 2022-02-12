@@ -6,8 +6,6 @@ vim.diagnostic.disable()
 
 local lspconfig = require("lspconfig")
 
-elixir_ls_dir = os.getenv('HOME') .. '/opt/elixir-ls'
-
 -- Neovim doesn't support snippets out of the box, so we need to mutate the
 -- capabilities we send to the language server to let them know we want snippets.
 
@@ -83,7 +81,7 @@ end
 
 -- ELXIR LS
 
-local path_to_elixirls = elixir_ls_dir .. "/language_server.sh"
+local path_to_elixirls = os.getenv('HOME') .. '/opt/elixir-ls/language_server.sh'
 
 lspconfig.elixirls.setup({
   cmd = {path_to_elixirls},

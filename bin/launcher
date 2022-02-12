@@ -1,24 +1,31 @@
 #!/bin/env bash
-menu=( \
-	books \
+menu=( \ 
+    books \
+    alacritty \
     firefox \
+    kitty \
     mixes \
     obsidian \
     soundcards \
     tracks \
     wifi \
-    terminal \
 )
 
 choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf)
 if [ $? = 0 ]; then
     case "$choice" in
+        alacritty)
+            setsid swaymsg -t command exec "alacritty";
+            ;;
         books)
             DIR=$HOME/fil/books
             FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
             if [ -f "$FILE" ]; then
                 setsid swaymsg -t command exec "zathura $FILE";
             fi
+            ;;
+        kitty)
+            setsid swaymsg -t command exec "kitty";
             ;;
         mixes)
             DIR=$HOME/fil/music/mixes
@@ -34,10 +41,6 @@ if [ $? = 0 ]; then
             ;;
         wifi)
             iwctl
-            ;;
-        terminal)
-            setsid swaymsg -t command exec \
-                "alacritty --config-file $HOME/.config/alacritty/alacritty.light.yml";
             ;;
         *)
             setsid swaymsg -t command exec "$choice"

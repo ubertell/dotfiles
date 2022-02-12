@@ -1,11 +1,11 @@
 require('nvim-treesitter.configs').setup {
   ensure_installed = {
-    'lua', 'c', 'typescript', 'javascript', 'json'
+    'lua', 'c', 'typescript', 'javascript', 'json', 'elixir'
   },
   highlight = {
     enable = true,
-    -- disable = {'commonlisp', 'erlang'},
-    disable = {'commonlisp', 'erlang', 'elixir'},
+    disable = {'commonlisp', 'erlang'},
+    -- disable = {'commonlisp', 'erlang', 'elixir'},
     additional_vim_regex_highlighting = false,
   },
   indent = {
