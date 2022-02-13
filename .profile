@@ -16,7 +16,7 @@ done
 
 export PATH
 
-export PGDATA=$HOME/database
+# export PGDATA=$HOME/database
 
 # EDITOR
 export EDITOR='nvim'
@@ -24,9 +24,17 @@ export EDITOR='nvim'
 # pretty colors in terminal; exports LS_COLORS.
 eval "$(dircolors $HOME/.dircolors)"
 
-# firefox on wayland
-export MOZ_ENABLE_WAYLAND=1
-
 # no history in general
 export HISTFILE=''
 export LESSHISTFILE=''
+
+# firefox on wayland
+export MOZ_ENABLE_WAYLAND=1
+
+# random wayland
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+export QT_QPA_PLATFORM=wayland
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export _JAVA_AWT_WM_NONREPARENTING=1
+export MOZ_DBUS_REMOTE=1
+export GTK_USE_PORTAL=0

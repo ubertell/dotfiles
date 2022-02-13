@@ -1,4 +1,4 @@
-XDG_DOWNLOAD_DIR="$HOME/dow"
+XDG_DOWNLOAD_DIR="$HOME/down"
 XDG_DESKTOP_DIR="/tmp/desktop"
 XDG_DOCUMENTS_DIR="/tmp/documents"
 XDG_MUSIC_DIR="/tmp/music"

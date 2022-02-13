@@ -7,11 +7,12 @@ menu=( \
     mixes \
     obsidian \
     soundcards \
+    thunderbird \ 
     tracks \
     wifi \
 )
 
-choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf)
+choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf --color=bw)
 if [ $? = 0 ]; then
     case "$choice" in
         alacritty)
