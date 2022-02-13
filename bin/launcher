@@ -1,36 +1,31 @@
 #!/bin/env bash
 menu=( \ 
     books \
-    alacritty \
+    email \
     firefox \
-    kitty \
+    dev_firefox \
     mixes \
     obsidian \
     soundcards \
-    thunderbird \ 
     tracks \
     wifi \
+    wireshark \ 
+    fireshark
 )
 
-choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf --color=bw)
+choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf --color=bw --info=hidden --pointer=" ")
 if [ $? = 0 ]; then
     case "$choice" in
-        alacritty)
-            setsid swaymsg -t command exec "alacritty";
-            ;;
         books)
-            DIR=$HOME/fil/books
-            FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
+            DIR=$HOME/files/books
+            FILE="$DIR/"$(cd $DIR && find . -maxdepth 1 -type f | fzf --color=bw --info=hidden --pointer=" ")
             if [ -f "$FILE" ]; then
                 setsid swaymsg -t command exec "zathura $FILE";
             fi
             ;;
-        kitty)
-            setsid swaymsg -t command exec "kitty";
-            ;;
         mixes)
-            DIR=$HOME/fil/music/mixes
-            FILE="$DIR/"$(cd $DIR && find . -type f | fzf)
+            DIR=$HOME/files/music/mixes
+            FILE="$DIR/"$(cd $DIR && find . -type f | fzf --color=bw --info=hidden --pointer=" ")
             mpv --no-video $FILE
             ;;
         soundcards)
@@ -38,10 +33,27 @@ if [ $? = 0 ]; then
             read -n 1 -p ...
             ;;
         tracks)
-            mpv --shuffle --no-video $HOME/fil/music/tracks/{2020,2021}
+            mpv --shuffle --no-video $HOME/files/music/tracks/{2020,2021}
             ;;
         wifi)
             iwctl
+            ;;
+        email)
+            setsid swaymsg -t command exec "evolution"
+            ;;
+        wireshark)
+            setsid swaymsg -t command exec "wireshark"
+            ;;
+        firefox)
+            setsid swaymsg -t command exec "firefox"
+            ;;
+        dev_firefox)
+            setsid swaymsg -t command exec "$HOME/opt/firefox/firefox"
+            ;;
+        fireshark)
+            setsid swaymsg -t command exec \
+                'env SSLKEYLOGFILE="$HOME/log/firefox/ssl_key" $HOME/opt/firefox/firefox 2>&1 > "$HOME/log/firefox.log"'
+            setsid swaymsg -t command exec "SSLKEYLOGFILE='$HOME/log/firefox/ssl_key' wireshark"
             ;;
         *)
             setsid swaymsg -t command exec "$choice"

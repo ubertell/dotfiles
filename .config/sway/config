@@ -34,11 +34,14 @@ seat * hide_cursor 1000
 output DP-2  pos 0    0 res 3840x2160 scale 1
 output eDP-1 pos 3840 0 res 3840x2400 scale 1
 
+# output DP-1  pos 0    0 res 1920x1080 scale 1
+# output eDP-1 pos 1920 0 res 3840x2400 scale 1
+
 bindswitch --reload lid:on  output eDP-1 disable
 bindswitch --reload lid:off output eDP-1 enable
 
 # Set background
-output * bg $HOME/fil/pictures/wallpapers/tree.png fill
+output * bg $HOME/files/pictures/wallpapers/tree.png fill
 
 # Keyboard
 input * {
@@ -57,11 +60,11 @@ bindsym $mod+w kill
 
 bindsym $mod+Return exec kitty
 
-for_window [app_id="^menu$"] floating enable,border pixel 4,resize set 900 700
+for_window [app_id="^menu$"] floating enable,border pixel 4,resize set 970 600
 
 bindsym $mod+d exec alacritty --class=menu -e /bin/bash -c $HOME/bin/launcher
 
-bindsym $mod+down exec swaylock -f -i $HOME/files/pics/stickman.jpg -s center -c 1c1c1c -e
+bindsym $mod+down exec swaylock -f -i $HOME/files/pictures/wallpapers/tree.jpg -s center -c 1c1c1c -e
 
 set $left  h
 set $down  j
