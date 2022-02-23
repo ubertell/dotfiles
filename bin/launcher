@@ -3,14 +3,17 @@ menu=( \
     books \
     email \
     firefox \
+    chromium \
     dev_firefox \
     mixes \
     obsidian \
     soundcards \
     tracks \
     wifi \
-    wireshark \ 
-    fireshark
+    wireshark \
+    fireshark \
+    brightness \
+    libreoffice
 )
 
 choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf --color=bw --info=hidden --pointer=" ")
@@ -54,6 +57,9 @@ if [ $? = 0 ]; then
             setsid swaymsg -t command exec \
                 'env SSLKEYLOGFILE="$HOME/log/firefox/ssl_key" $HOME/opt/firefox/firefox 2>&1 > "$HOME/log/firefox.log"'
             setsid swaymsg -t command exec "SSLKEYLOGFILE='$HOME/log/firefox/ssl_key' wireshark"
+            ;;
+        brightness)
+            sudo brightnessctl s $(cat $HOME/.brightness | fzf --info=hidden --color=bw --pointer=" ")
             ;;
         *)
             setsid swaymsg -t command exec "$choice"
