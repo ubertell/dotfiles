@@ -4,3 +4,7 @@ alias ls='exa -F -s=type'
 alias tree='tree -F'
 alias vi='nvim'
 alias vim='nvim'
+ 
+alias fzf='fzf --color=dark,gutter:#2b3339,prompt:green,pointer:red,hl:red,bg+:black,hl+:red'
+
+alias docker='podman'
