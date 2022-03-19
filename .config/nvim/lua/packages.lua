@@ -30,6 +30,8 @@ require('packer').startup(function()
     'tpope/vim-surround',
     'tpope/vim-unimpaired',
     'vlime/vlime',
+    'williamboman/nvim-lsp-installer',
+    'mattn/emmet-vim'
   }
 
   use {
