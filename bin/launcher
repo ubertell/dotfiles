@@ -13,7 +13,8 @@ menu=( \
     wireshark \
     fireshark \
     brightness \
-    libreoffice
+    libreoffice \
+    bassdrive \
 )
 
 choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf --color=bw --info=hidden --pointer=" ")
@@ -30,6 +31,9 @@ if [ $? = 0 ]; then
             DIR=$HOME/files/music/mixes
             FILE="$DIR/"$(cd $DIR && find . -type f | fzf --color=bw --info=hidden --pointer=" ")
             mpv --no-video $FILE
+            ;;
+        bassdrive)
+            mpv 'http://bassdrive.com/bassdrive.m3u'
             ;;
         soundcards)
             cat /proc/asound/modules

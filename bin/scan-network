@@ -1,2 +1,2 @@
 #!/bin/env sh
-echo 'hello'
+NETWORK=$(ip a | grep inet | grep wlan0 | awk '{ print $2 }')
