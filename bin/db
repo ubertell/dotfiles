@@ -3,11 +3,12 @@
 print_help() {
     echo "Usage: db ACTION"
     echo "ACTIONS:"
-    echo " start    start db."
-    echo " stop     stop db."
-    echo " status   show db status."
-    echo " version  show db version."
-    echo " connect  connect to db."
+    echo " init    name      init db."
+    echo " start   name      start db."
+    echo " stop    name      stop db."
+    echo " status  name      show db status."
+    echo " connect name      connect to db."
+    echo " version           show db version."
 }
 
 if [ $# -lt 1 ]; then
@@ -15,29 +16,54 @@ if [ $# -lt 1 ]; then
     exit 0
 fi
 
-export PGDATA=$HOME/database
-        
+export DATABASES_DIR=$HOME/database
+
+export PGBIN=/usr/lib/psql14/bin
+
+if [ "$1" = "version" ]; then
+    $PGBIN/pg_ctl --version | awk '{$1=""}1'
+    exit
+fi
+
+if [ "$1" = "status" ] && [ "$2" = "all" ]; then
+    for dir in $DATABASES_DIR/*/
+    do
+	echo -n "$(basename -- $dir) => "
+    	$PGBIN/pg_ctl -D $dir status | head -n 1
+    done
+    exit
+fi
+
+export PGDATA=$DATABASES_DIR/$2
+
+if [ "$1" = "init" ]; then
+    $PGBIN/pg_ctl -D $PGDATA initdb
+    exit
+fi
+
+if [ ! -d "$PGDATA" ]; then
+    echo "$PGDATA: data directory does not exists."
+    exit
+fi
+
 case "$1" in
     start)
-        pg_ctl -D $PGDATA -l $PGDATA/logfile start
+        $PGBIN/pg_ctl -D $PGDATA -l $PGDATA/logfile start
         ;;
     up)
-        pg_ctl -D $PGDATA -l $PGDATA/logfile start
+        $PGBIN/pg_ctl -D $PGDATA -l $PGDATA/logfile start
         ;;
     down)
-        pg_ctl -D $PGDATA stop
+        $PGBIN/pg_ctl -D $PGDATA stop
         ;;
     stop)
-        pg_ctl -D $PGDATA stop
+        $PGBIN/pg_ctl -D $PGDATA stop
         ;;
     status)
-        pg_ctl -D $PGDATA status
-        ;;
-    version)
-        pg_ctl --version | awk '{$1=""}1'
+        $PGBIN/pg_ctl -D $PGDATA status
         ;;
     connect)
-        psql
+        $PGBIN/psql
         ;;
     *)
         echo "Unknown option: $*"
