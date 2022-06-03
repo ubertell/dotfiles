@@ -1,0 +1,94 @@
+#!/bin/env sh
+
+print_help() {
+    echo "Usage: http ACTION [parameters...]"
+    echo "ACTIONS:"
+    echo "  cookies         List all cookies."
+    echo "  cookies reset   Reset cookies."
+    echo "  cookies list    List all cookies."
+    echo "  get    <URL>    Do a HTTP GET request and print response body."
+    echo "  header <URL>    Do a HTTP HEADERS request and print headers."
+    echo "  json   <URL>    Do a HTTP GET and print JSON response."
+}
+
+print_line() {
+    printf '%.s─' $(seq 1 $(tput cols))
+}
+
+if [ $# -lt 1 ]; then
+    print_help
+    exit 0
+fi
+
+COOKIE_JAR="$HOME/.http_cookie_jar"
+
+case "$1" in
+    cookies)
+        CMD="$2"
+        if [ -z "$CMD" ]; then
+            CMD="list"
+        fi
+        case "$CMD" in
+            reset)
+                rm -f $COOKIE_JAR && touch $COOKIE_JAR
+                ;;
+            list)
+                cat $COOKIE_JAR | grep -v -e '^#' -e '^$' |\
+                column \
+                    --table \
+                    --output-separator '  |  ' \
+                    --table-columns 'domain,subdomains,path,HTTPS only,expires at,name,value' \
+                    --table-order 'name,value,path,domain,subdomains,HTTPS only,expires at' |\
+                sed "1i$(print_line)" |\
+                sed "3i$(print_line)"
+                ;;
+            *)
+                echo "Unknown option: $*"
+                print_help
+                ;;
+        esac
+        ;;
+    get)
+        print_line
+        echo "HTTP BODY"
+        print_line
+        HTML=$(curl -s --cookie-jar $COOKIE_JAR --cookie $COOKIE_JAR $2)
+        if [ -z "$HTML" ]; then
+            exit 0
+        fi
+        echo "$HTML" | pup
+        ;;
+    json)
+        print_line
+        echo "HTTP BODY"
+        print_line
+        HTML=$(curl -si --cookie-jar $COOKIE_JAR --cookie $COOKIE_JAR $2)
+        if [ -z "$HTML" ]; then
+            exit 0
+        fi
+        echo "$HTML" | jq
+        ;;
+    headers)
+        DATA=$(curl -sI --cookie-jar $COOKIE_JAR --cookie $COOKIE_JAR $2) 
+        STATUS=$(echo "$DATA" | head -n 1)
+        HEADERS=$(echo "$DATA" | tail -n +2)
+        echo
+        print_line
+        echo "$STATUS"
+        echo "$HEADERS" |\
+        sort |\
+        column \
+            --separator ':' \
+            --table \
+            --table-columns-limit 2 \
+            --table-columns 'key,value' \
+            --output-separator ' | ' |\
+        sed "1i$(print_line)" |\
+        sed "3i$(print_line)"
+        print_line
+        ;;
+    *)
+        echo "Unknown option: $*"
+        print_help
+        ;;
+esac

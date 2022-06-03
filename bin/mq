@@ -1,0 +1,139 @@
+#!/bin/env bash
+
+print_help() {
+    echo "Usage: mq ACTION [CMD ARGS]"
+    echo "ACTIONS:"
+    echo " grant all USER HOST        grant all permissions for user on host."
+    echo " host add NAME              add vhost."
+    echo " host list                  list vhosts."
+    echo " host permissions HOST      list permissions for vhost."
+    echo " plugin enable PLUGINS..    enable plugin."
+    echo " plugin list                list plugins."
+    echo " start                      start server."
+    echo " status                     show server status."
+    echo " stop                       stop server."
+    echo " ulimit                     show linux file limits for current user."
+    echo " user add USER PASS         add user."
+    echo " user list                  list users."
+    echo " user password USER [PASS]  set user password."
+    echo " user tag USER [TAGS..]     tag user."
+    echo " version                    show client version."
+    echo " console                    open management console in browser."
+}
+
+if [ $# -lt 1 ]; then
+    print_help
+    exit 0
+fi
+
+export RABBITMQ_HOME=$HOME/opt/rabbitmq_server-3.9.15/
+
+SBIN=$RABBITMQ_HOME/sbin
+
+ulimit -n 4096
+
+case "$1" in
+    host)
+        case "$2" in
+            add)
+                $SBIN/rabbitmqctl add_vhost "$3"
+                ;;
+            list)
+                $SBIN/rabbitmqctl list_vhosts
+                ;;
+            permissions)
+                $SBIN/rabbitmqctl list_permissions --vhost "$3"
+                ;;
+            *)
+                echo "Unknown option: $*"
+                print_help
+                ;;
+        esac
+        ;;
+    grant)
+        case "$2" in
+            all)
+                $SBIN/rabbitmqctl set_permissions --vhost "$4" "$3" ".*" ".*" ".*" 
+                ;;
+        esac
+        ;;
+    plugin)
+        case "$2" in
+            enable)
+                $SBIN/rabbitmq-plugins enable "${@:3}"
+                ;;
+            list)
+                $SBIN/rabbitmq-plugins list
+                ;;
+        esac
+        ;;
+    start)
+        $SBIN/rabbitmq-server -detached
+        sleep 1
+        $SBIN/rabbitmqctl start_app
+        ;;
+    status)
+        $SBIN/rabbitmqctl status 2> /dev/null
+        if [ $? != "0" ]; then
+            echo "APP NOT RUNNING"
+        fi
+        ;;
+    stop)
+        $SBIN/rabbitmqctl stop
+        ;;
+    tag)
+        case "$2" in
+            list)
+                echo "administrator"
+                echo "management"
+                echo "monitoring"
+                echo "policymaker"
+                ;;
+            *)
+                echo "Unknown option: $*"
+                print_help
+                ;;
+        esac
+        ;;
+    version)
+        $SBIN/rabbitmqctl version
+        ;;
+    ulimit)
+        echo "HARD: $(ulimit -Hn)"
+        echo "SOFT: $(ulimit -Sn)"
+        ;;
+    user)
+        case "$2" in
+            add)
+                $SBIN/rabbitmqctl add_user "$3" "$4"
+                ;;
+            limits)
+                $SBIN/rabbitmqctl list_user_limits --user "$3"
+                ;;
+            list)
+                $SBIN/rabbitmqctl list_users
+                ;;
+            tag)
+                $SBIN/rabbitmqctl set_user_tags "$3" "${@:4}"
+                ;;
+            password)
+                if [ -z "$4" ]; then
+                    $SBIN/rabbitmqctl clear_password "$3"
+                    exit
+                fi
+                $SBIN/rabbitmqctl change_password "$3" "$4"
+                ;;
+            *)
+                echo "Unknown option: $*"
+                print_help
+                ;;
+        esac
+        ;;
+    console)
+        xdg-open "http://localhost:15672"
+        ;;
+    *)
+        echo "Unknown option: $*"
+        print_help
+        ;;
+esac

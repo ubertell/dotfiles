@@ -1,2 +1,2 @@
 #!/bin/env bash
-ip a | grep inet | grep wlan0 | awk '{ print $2 }'
+ip a | grep inet | grep wlp | awk '{ print $2 }'

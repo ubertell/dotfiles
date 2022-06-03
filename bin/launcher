@@ -1,20 +1,15 @@
 #!/bin/env bash
-menu=( \ 
-    books \
-    email \
-    firefox \
-    chromium \
-    dev_firefox \
-    mixes \
-    obsidian \
-    soundcards \
-    tracks \
-    wifi \
-    wireshark \
-    fireshark \
-    brightness \
-    libreoffice \
-    bassdrive \
+menu=( \
+	bassdrive \
+	books \
+	brightness \
+	email \
+	firefox \
+	music \
+	wireshark \
+  tracks \
+  volume \
+  obs \
 )
 
 choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf --color=bw --info=hidden --pointer=" ")
@@ -27,8 +22,12 @@ if [ $? = 0 ]; then
                 setsid swaymsg -t command exec "zathura $FILE";
             fi
             ;;
-        mixes)
-            DIR=$HOME/files/music/mixes
+        tracks)
+            DIR=$HOME/files/music/tracks
+            mpv --no-video --shuffle $DIR
+            ;;
+        music)
+            DIR=$HOME/files/music
             FILE="$DIR/"$(cd $DIR && find . -type f | fzf --color=bw --info=hidden --pointer=" ")
             mpv --no-video $FILE
             ;;
@@ -39,23 +38,17 @@ if [ $? = 0 ]; then
             cat /proc/asound/modules
             read -n 1 -p ...
             ;;
-        tracks)
-            mpv --shuffle --no-video $HOME/files/music/tracks/{2020,2021}
-            ;;
-        wifi)
-            iwctl
-            ;;
         email)
             setsid swaymsg -t command exec "evolution"
             ;;
         wireshark)
             setsid swaymsg -t command exec "wireshark"
             ;;
+        obs)
+            setsid swaymsg -t command exec "obs"
+            ;;
         firefox)
             setsid swaymsg -t command exec "firefox"
-            ;;
-        dev_firefox)
-            setsid swaymsg -t command exec "$HOME/opt/firefox/firefox"
             ;;
         fireshark)
             setsid swaymsg -t command exec \
@@ -64,6 +57,9 @@ if [ $? = 0 ]; then
             ;;
         brightness)
             sudo brightnessctl s $(cat $HOME/.brightness | fzf --info=hidden --color=bw --pointer=" ")
+            ;;
+        volume)
+            pamixer --set-volume $(cat $HOME/.volume | fzf --info=hidden --color=bw --pointer=" ")
             ;;
         *)
             setsid swaymsg -t command exec "$choice"

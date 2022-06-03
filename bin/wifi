@@ -9,6 +9,8 @@ print_help() {
     echo " down                 disconnect from a network."
 }
 
+STATION="wlp0s20f3"
+
 if [ $# -lt 1 ]; then
     print_help
     exit 0
@@ -19,17 +21,17 @@ case "$1" in
         print_help
         ;;
     scan)
-        iwctl station wlan0 scan
-        iwctl station wlan0 get-networks
+        iwctl station $STATION scan
+        iwctl station $STATION get-networks
         ;;
     up)
-        iwctl station wlan0 connect $2
+        iwctl station $STATION connect $2
         ;;
     down)
-        iwctl station wlan0 disconnect
+        iwctl station $STATION disconnect
         ;;
     show)
-        iwctl station wlan0 show
+        iwctl station $STATION show
         ;;
     *)
         echo "Unknown option: $*"

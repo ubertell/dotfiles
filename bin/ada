@@ -1,0 +1,61 @@
+#!/bin/zsh
+
+print_help() {
+    echo "Usage: ada ACTION [CMD] [ARGS]"
+    echo "ACTIONS:"
+    echo " build              build project."
+    echo " init               init project."
+}
+
+if [ $# -lt 1 ]; then
+    print_help
+    exit 0
+fi
+
+export GNAT_BIN=$HOME/opt/gnat/bin
+export GNAT_PROJECT_FILE="default.gpr"
+
+case "$1" in
+    init)
+      if [[ -f $GNAT_PROJECT_FILE ]]; then
+        echo "file '$GNAT_PROJECT_FILE' already exists."
+        exit 2
+      fi
+      cat > $GNAT_PROJECT_FILE<< EOF
+project Default is
+
+  for Main use ("main");
+  for Object_Dir use "obj";
+  for Source_Dirs use ("src");
+
+end Default;
+EOF
+      cat >> .gitignore<< EOF
+obj/
+EOF
+      mkdir -p src/
+      mkdir -p obj/
+cat > src/main.adb<< EOF
+with Ada.Text_IO; use Ada.Text_IO;
+
+procedure Main is
+begin
+   Put_Line ("Hello, World!");
+end Main;
+EOF
+      ;;
+    build)
+        if [[ ! -f $GNAT_PROJECT_FILE ]]; then
+          echo "project file '$GNAT_PROJECT_FILE' does not exists."
+          exit 2
+        fi
+        $GNAT_BIN/gprbuild -P $GNAT_PROJECT_FILE -gnat2022
+        ;;
+    run)
+      ada build 1> /dev/null && ./obj/main
+      ;;
+    *)
+        echo "Unknown option: $*"
+        print_help
+        ;;
+esac
