@@ -10,6 +10,7 @@ menu=( \
   tracks \
   volume \
   obs \
+  arduino
 )
 
 choice=$(for c in "${menu[@]}"; do printf "%s\n" $c; done | sort -u | fzf --color=bw --info=hidden --pointer=" ")
@@ -17,7 +18,7 @@ if [ $? = 0 ]; then
     case "$choice" in
         books)
             DIR=$HOME/files/books
-            FILE="$DIR/"$(cd $DIR && find . -maxdepth 1 -type f | fzf --color=bw --info=hidden --pointer=" ")
+            FILE="$DIR/"$(cd $DIR && find . -maxdepth 2 -type f | fzf --color=bw --info=hidden --pointer=" ")
             if [ -f "$FILE" ]; then
                 setsid swaymsg -t command exec "zathura $FILE";
             fi
@@ -49,6 +50,9 @@ if [ $? = 0 ]; then
             ;;
         firefox)
             setsid swaymsg -t command exec "firefox"
+            ;;
+        arduino)
+            setsid swaymsg -t command exec "arduino-ide"
             ;;
         fireshark)
             setsid swaymsg -t command exec \
