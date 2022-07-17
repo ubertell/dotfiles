@@ -7,8 +7,8 @@ o = vim.opt
 -- Options --
 -------------
 
-c 'syntax off'
--- c 'filetype plugin on'
+c 'syntax on'
+c 'filetype plugin on'
 
 o.backup        = false
 o.cmdheight     = 1
@@ -28,7 +28,7 @@ o.tabstop       = 2
 o.termguicolors = true
 o.undodir       = f.stdpath('data') .. '/undo'
 o.undofile      = true
-o.updatetime    = 300
+o.updatetime    = 100
 o.writebackup   = false
 o.colorcolumn   = "80"
 
@@ -109,10 +109,13 @@ key('n', '<F10>',
 
 function _G.autosave()
   if 1 == vim.api.nvim_eval('&modified') then
-    c 'execute "update"'
-    c 'ALEFix'
+    c 'silent! ALEFix'
+    c 'update'
+    c 'ALELint'
   end
 end
+
+-- augroup('alefix', {'User ALEFixPost update'})
 
 augroup('autosave', {'CursorHold * silent! call v:lua.autosave()'})
 
@@ -226,6 +229,42 @@ require('packer').startup(function()
 end)
 
 ---------
+-- ALE --
+---------
+
+g.ale_sign_error = '›'
+g.ale_sign_warning = '›'
+
+g.ale_ada_gcc_options = '-gnatwa -gnatq -gnat2022'
+
+g.ale_lint_on_text_changed = 0
+g.ale_lint_on_insert_leave = 0
+g.ale_lint_on_enter = 0
+g.ale_lint_on_save = 0
+g.ale_lint_on_filetype_changed = 0
+
+g.ale_fixers = {
+  ada = {
+    'gnatpp'
+  },
+  elixir = {
+    'mix_format'
+  },
+  markdown = {}
+}
+
+g.ale_linters_explicit = 1
+g.ale_linters = {
+  markdown = {},
+  ada = {'adals', 'gcc'},
+  elixir = {'credo'},
+  typescript = {'deno'},
+  javascript = {'deno'}
+}
+
+-- g.ale_disable_lsp = 1
+
+---------
 -- FZF --
 ---------
 
@@ -288,6 +327,8 @@ vim.diagnostic.config({
 vim.fn.sign_define("DiagnosticSignError",
                    {texthl = "DiagnosticSignError", text = "›", numhl = "DiagnosticsSignError"})
 
+-- vim.diagnostic.hide()
+
 ----------------
 -- Lightspeed --
 ----------------
@@ -349,32 +390,6 @@ require("nvim-tree").setup {
     require_confirm = true
   },
 }
-
----------
--- ALE --
----------
-
-g.ale_fixers = {
-  ['*'] = {
-    -- 'remove_trailing_lines',
-    'trim_whitespace'
-  },
-  ada = {
-    'gnatpp'
-  },
-  markdown = {}
-}
-
-g.ale_linters = {
-  markdown = {},
-  ada = {'adals', 'gcc'}
-}
-
-g.ale_ada_gcc_options = '-gnatwa -gnatq -gnat2022'
-
-g.ale_sign_error = '›'
-g.ale_sign_warning = '›'
-
 -------------
 -- LUASnip --
 -------------
