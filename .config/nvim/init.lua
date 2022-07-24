@@ -403,4 +403,5 @@ require("nvim-tree").setup {
 -------------
 
 require('snippets/ada')
+require('snippets/sh')
 require('snippets/elixir')
