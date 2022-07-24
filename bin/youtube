@@ -1,4 +1,4 @@
 #!/bin/env sh
-FILENAME=$(yt-dlp --no-playlist --print=filename --no-simulate --restrict-filenames -o '%(fulltitle)s.%(ext)s' $1)
+FILENAME=$(yt-dlp -q --no-playlist --print=filename --no-simulate --restrict-filenames -o '%(fulltitle)s.%(ext)s' $1)
 chmod a-x "$FILENAME"
 perl-rename 'tr/\-A-Z/_a-z/' $FILENAME
