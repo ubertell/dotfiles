@@ -16,6 +16,7 @@ c 'hi! Cyan    guifg=#83c092'
 c 'hi! White   guifg=#d3c6aa'
 c 'hi! Normal  guifg=#d3c6aa'
 c 'hi! Bold    gui=bold'
+c 'hi! Gray    guifg=#9a9a90'
 
 c 'hi! Underline guifg=none guibg=none gui=underline'
 
@@ -33,8 +34,10 @@ c 'hi VertSplit     guifg=#323c41   guibg=none      gui=none'
 c 'hi Visual        guifg=#d3c6aa   guibg=#424c51'
 
 c 'hi! link ALEError       Red'
+c 'hi! link ALEErrorLine   Normal'
 c 'hi! link ALEErrorSign   Red'
 c 'hi! link ALEWarning     Yellow'
+c 'hi! link ALEWarningLine Normal'
 c 'hi! link ALEWarningSign Yellow'
 c 'hi! link Error          Red'
 c 'hi! link ErrorMsg       Red'
@@ -61,12 +64,25 @@ c 'hi! link NvimTreeOpenedFolderName Normal'
 c 'hi! link NvimTreeOpenedFile Underlined'
 c 'hi! link NvimTreeRootFolder Normal'
 c 'hi! link NvimTreeSpecialFile Normal'
+c 'hi! link NvimTreeExecFile Normal'
+c 'hi! link NvimTreeFileNew Normal'
+c 'hi! link NvimTreeFileRenamed Normal'
+c 'hi! link NvimTreeFileStaged Normal'
+c 'hi! link NvimTreeImageFile Normal'
+c 'hi! link NvimTreeEmptyFolderName Normal'
 
 -- Ada
-c [[for hl in getcompletion('Ada', 'highlight') | execute 'hi! link '.hl.' Normal' | endfor]]
+-- c [[for hl in getcompletion('Ada', 'highlight') | execute 'hi! link '.hl.' Normal' | endfor]]
+-- c [[for hl in getcompletion('lua', 'highlight') | execute 'hi! link '.hl.' Normal' | endfor]]
 
--- Lua
-c [[for hl in getcompletion('lua', 'highlight') | execute 'hi! link '.hl.' Normal' | endfor]]
+c 'hi! link LuaComment Gray'
+c 'hi! link vimComment Gray'
+c 'hi! link ElixirComment Gray'
+c 'hi! link javascriptComment Gray'
+c 'hi! link TypescriptComment Gray'
+c 'hi! link ElixirDocString Gray'
+c 'hi! link ElixirDocStringDelimiter Gray'
+
 
 c 'hi! link adaBegin Blue'
 c 'hi! link adaEnd Blue'
